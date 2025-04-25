@@ -6,6 +6,7 @@ import Favorites from "./components/pages/Favorites";
 import Profile from "./components/pages/Profile";
 import MainLayout from "./components/pages/MainLayout";
 import AuthLayout from "./components/pages/AuthLayout";
+import BookPage from "./components/pages/BookPage";
 
 export const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ export const router = createBrowserRouter([
       {
         path: "/profile",
         element: <Profile />,
+      },
+      {
+        path: "/:id",
+        element: <BookPage />,
       },
     ],
   },

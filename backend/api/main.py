@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException, Query
 import httpx
-from services.book_service import fetch_books_from_api, format_book
-from models import  BookSearchResult
+from services.book_service import fetch_book_by_id, fetch_books_from_api, format_book, format_details_book
+from models import  BookDetailsResponse, BookSearchResult
 from typing import Optional
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -53,5 +53,32 @@ async def find_books(
             detail=f"{e}"
         )
 
+
+@app.get("/books/{id}", response_model=BookDetailsResponse or None)
+async def find_books(
+    id: str
+) -> BookDetailsResponse:
+    
+    if not id:
+        return None
+
+    try:
+        data = await fetch_book_by_id(id)
+        if not data.id:
+                return None
+
+        book_details = format_details_book(data)
+        return book_details
+
+    except httpx.HTTPStatusError as e:
+        raise HTTPException(
+            status_code=400,
+            detail=f"{e.response.status_code} - {e.response.text}"
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=400,
+            detail=f"{e}"
+        )
 
 

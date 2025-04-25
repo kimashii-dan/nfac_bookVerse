@@ -49,7 +49,7 @@ type BookListType = {
   id: string;
   title: string;
   author: string;
-  date: string;
+  publishDate: string;
   image: string;
   averageRating: number;
 };
@@ -59,7 +59,7 @@ type BookDetailsType = {
   title: string;
   author: string;
   description: string;
-  date: string;
+  publishDate: string;
   image: string;
   averageRating: string;
   ratingsCount: string;

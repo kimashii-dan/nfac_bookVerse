@@ -1,7 +1,7 @@
 import { BookListType } from "../types";
 import BookCard from "./BookCard";
 
-export default function BookCardList({
+export default function BookList({
   books,
 }: {
   books: BookListType[] | null | undefined;

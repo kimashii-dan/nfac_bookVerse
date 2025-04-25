@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import SearchFilter from "../SearchFilter";
 import { useSearch } from "../../hooks/useSearch";
-import BookCardList from "../BookCardList";
 import PaginationBooks from "../PaginationBooks";
 import { fetchBooks } from "../../helpers/api";
 import { useRef } from "react";
+import BookList from "../BookList";
 
 export default function Home() {
   const { query, searchBy, page } = useSearch();
@@ -20,7 +20,6 @@ export default function Home() {
   });
 
   const topRef = useRef<HTMLDivElement>(null);
-
   return (
     <div ref={topRef} className="container my-12">
       <SearchFilter />
@@ -32,10 +31,10 @@ export default function Home() {
           Error: {(error as Error).message}
         </div>
       ) : (
-        <BookCardList books={booksData?.books} />
+        <BookList books={booksData?.books} />
       )}
 
-      {query && (
+      {booksData?.books !== null && (
         <PaginationBooks
           baseUrl={`/?query=${query}&searchBy=${searchBy}`}
           totalBooks={booksData?.totalBooks}

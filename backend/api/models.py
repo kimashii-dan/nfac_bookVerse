@@ -13,9 +13,23 @@ class VolumeInfo(BaseModel):
     imageLinks: Optional[ImageLinks] = None
     averageRating: Optional[float] = None
 
+class VolumeDetailsInfo(BaseModel):
+    title: Optional[str] = None
+    authors: Optional[List[str]] = None
+    description: Optional[str] = None
+    publishedDate: Optional[str] = None
+    imageLinks: Optional[ImageLinks] = None
+    averageRating: Optional[float] = None
+    ratingsCount: Optional[int] = None    
+
+
 class APIBookItem(BaseModel):
     id: str
     volumeInfo: VolumeInfo
+
+class APIBookDetailsItem(BaseModel):
+    id: str
+    volumeInfo: VolumeDetailsInfo
 
 class APIBookListResponse(BaseModel):
     items: Optional[List[APIBookItem]] = None
@@ -28,6 +42,16 @@ class BookResponse(BaseModel):
     publishDate: str
     image: str
     averageRating: Optional[float] = None
+
+class BookDetailsResponse(BaseModel):
+    id: str
+    title: str
+    author: str
+    description: Optional[str] = None
+    publishDate: str
+    image: str
+    averageRating: Optional[float] = None
+    ratingsCount: Optional[int] = None
 
 class BookSearchResult(BaseModel):
     books: Optional[List[BookResponse]] = None

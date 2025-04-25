@@ -1,4 +1,4 @@
-import { BookListType, SearchParams } from "../types";
+import { BookDetailsType, BookListType, SearchParams } from "../types";
 
 const API_BASE = import.meta.env.VITE_API_BASE;
 
@@ -17,6 +17,21 @@ export const fetchBooks = async (
       query
     )}&search_by=${searchBy}&page=${page}`
   );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch books");
+  }
+
+  return response.json();
+};
+
+export const fetchBook = async (
+  id: string | undefined
+): Promise<BookDetailsType | null> => {
+  if (!id) {
+    return null;
+  }
+  const response = await fetch(`${API_BASE}/books/${id}`);
 
   if (!response.ok) {
     throw new Error("Failed to fetch books");

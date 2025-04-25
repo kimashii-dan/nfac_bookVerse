@@ -5,13 +5,13 @@ import Footer from "../Footer";
 export default function MainLayout() {
   return (
     <>
-      <header className="p-4 border-b">
+      <header className="p-6 border-b">
         <Header />
       </header>
       <main className="flex-1">
         <Outlet />
       </main>
-      <footer className="p-4 border-t">
+      <footer className="p-6 border-t">
         <Footer />
       </footer>
     </>

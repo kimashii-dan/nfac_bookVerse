@@ -19,8 +19,9 @@ export default function BookCard({ book }: { book: BookListType }) {
           <h1>{book.title}</h1>
         </CardTitle>
         <CardDescription>
-          <h2>{book.author}</h2>
-          <h3>{book.date}</h3>
+          <h2>
+            {book.author} • {book.publishDate}
+          </h2>
         </CardDescription>
       </CardHeader>
 
@@ -28,18 +29,16 @@ export default function BookCard({ book }: { book: BookListType }) {
         <img
           src={book.image === "" ? "/placeholder.jpg" : book.image}
           alt={book.title}
-          className="w-56 h-80"
+          className="w-56 h-80 object-cover rounded-sm"
         />
         <CardAction className="centered-row">
-          <Button>
+          <Button asChild>
             <Link to={`/${book.id}`}>View details</Link>
           </Button>
-          {book.averageRating && (
-            <p className="group gap-2">
-              {book.averageRating}
-              <Star color="orange" fill="yellow" />
-            </p>
-          )}
+          <div className="group gap-2">
+            {book.averageRating ? book.averageRating : "?"}
+            <Star color="orange" fill="yellow" />
+          </div>
         </CardAction>
       </CardContent>
     </Card>

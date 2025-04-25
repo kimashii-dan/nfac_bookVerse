@@ -34,7 +34,7 @@ export default function SearchFilter() {
         value={localSearch}
         onChange={(e) => setLocalSearch(e.target.value)}
         placeholder="Search by name..."
-        className="w-3/5"
+        className="w-8/12"
       />
       <Select
         onValueChange={(value) =>
@@ -42,7 +42,7 @@ export default function SearchFilter() {
         }
         value={localFilter}
       >
-        <SelectTrigger className="w-1/5">
+        <SelectTrigger className="w-3/12">
           <SelectValue placeholder="Search by" />
         </SelectTrigger>
         <SelectContent>
