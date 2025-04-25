@@ -2,6 +2,8 @@
 backend/venv/
 backend/api/__pycache__/
 backend/api/*.pyc
+backend/api/.env
+backend/api/services/__pycache__
 
 
 frontend/node_modules/

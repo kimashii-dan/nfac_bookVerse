@@ -1,47 +1,46 @@
 import { useQuery } from "@tanstack/react-query";
-import { User } from "../../types";
-import { fetchUsers } from "../../helpers/helpers";
-import { useState } from "react";
-import Search from "../Search";
-import Filter from "../Filter";
-import UserCardList from "../UserCardList";
+import SearchFilter from "../SearchFilter";
+import { useSearch } from "../../hooks/useSearch";
+import BookCardList from "../BookCardList";
+import PaginationBooks from "../PaginationBooks";
+import { fetchBooks } from "../../helpers/api";
+import { useRef } from "react";
 
 export default function Home() {
+  const { query, searchBy, page } = useSearch();
+
   const {
-    data: users,
+    data: booksData,
     isLoading,
     isError,
     error,
-  } = useQuery<User[]>({
-    queryKey: ["users"],
-    queryFn: fetchUsers,
+  } = useQuery({
+    queryKey: ["booksData", query, searchBy, page],
+    queryFn: () => fetchBooks({ query, searchBy, page }),
   });
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filterSelect, setFilterSelect] = useState("all");
+  const topRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="container my-12">
-      <div className="centered-row">
-        <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-        <Filter
-          filterSelect={filterSelect}
-          setFilterSelect={setFilterSelect}
-          users={users}
-        />
-      </div>
+    <div ref={topRef} className="container my-12">
+      <SearchFilter />
 
       {isLoading ? (
-        <div className="message-centered">Loading users...</div>
+        <div className="message-centered">Loading books...</div>
       ) : isError ? (
         <div className="message-centered">
           Error: {(error as Error).message}
         </div>
       ) : (
-        <UserCardList
-          users={users}
-          searchQuery={searchQuery}
-          filterSelect={filterSelect}
+        <BookCardList books={booksData?.books} />
+      )}
+
+      {query && (
+        <PaginationBooks
+          baseUrl={`/?query=${query}&searchBy=${searchBy}`}
+          totalBooks={booksData?.totalBooks}
+          currentPage={page}
+          topRef={topRef}
         />
       )}
     </div>

@@ -138,20 +138,16 @@
 }
 
 @layer components {
-  .container {
-    @apply max-w-4/5 w-full;
-  }
-
   .list {
     @apply grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-12 items-center justify-center mt-12;
   }
 
   .centered-row {
-    @apply flex justify-between items-center flex-row;
+    @apply flex justify-between items-center flex-row w-full;
   }
 
   .centered-column {
-    @apply flex justify-between items-center flex-col;
+    @apply flex justify-between items-center flex-col w-full;
   }
 
   .message-centered {
@@ -160,5 +156,15 @@
 
   .title {
     @apply text-2xl font-bold;
+  }
+
+  .group {
+    @apply flex flex-row items-center;
+  }
+}
+
+@layer utilities {
+  .container {
+    @apply max-w-4/5 w-full;
   }
 }

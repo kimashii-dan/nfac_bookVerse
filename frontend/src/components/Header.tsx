@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { ModeToggle } from "./ModeToggle";
 
 export default function Header() {
@@ -5,16 +6,15 @@ export default function Header() {
     <nav className="container">
       <ul className="centered-row">
         <li>
-          <a href="/">Home</a>
+          <Link to="/">Home</Link>
         </li>
         <li>
-          <a href="/favorites">Favorites</a>
+          <Link to="/favorites">Favorites</Link>
         </li>
-        <li>
+
+        <li className="group gap-5">
           <ModeToggle />
-        </li>
-        <li>
-          <a href="/login">Login</a>
+          <Link to="/login">Login</Link>
         </li>
       </ul>
     </nav>
