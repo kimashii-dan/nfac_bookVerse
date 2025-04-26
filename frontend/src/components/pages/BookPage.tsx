@@ -4,7 +4,7 @@ import { fetchBook } from "../../helpers/api";
 import BookCardDetails from "../BookCardDetails";
 
 export default function BookPage() {
-  const { id } = useParams();
+  const { favorites, id } = useParams();
   const {
     data: book,
     isLoading,
@@ -18,7 +18,7 @@ export default function BookPage() {
   return (
     <div className="smaller-container">
       {isLoading ? (
-        <div className="message-centered">Loading books...</div>
+        <div className="message-centered">Loading book...</div>
       ) : isError ? (
         <div className="message-centered">
           Error: {(error as Error).message}
@@ -26,7 +26,10 @@ export default function BookPage() {
       ) : (
         <>
           {book ? (
-            <BookCardDetails book={book} />
+            <BookCardDetails
+              isFavoritePage={favorites ? true : false}
+              book={book}
+            />
           ) : (
             <div className="message-centered">Book not found</div>
           )}

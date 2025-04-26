@@ -21,13 +21,16 @@ import {
 import { Input } from "../ui/input";
 import { registerSchema } from "../../lib/auth-schema";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { register } from "../../helpers/api";
+import { toast } from "sonner";
 
 export default function Register() {
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
       confirmPassword: "",
     },
@@ -35,9 +38,35 @@ export default function Register() {
 
   const { isSubmitting } = form.formState;
 
+  const navigate = useNavigate();
+
+  const mutation = useMutation({
+    mutationFn: register,
+    onSuccess: (data) => {
+      console.log(data);
+      toast("Register is successfull", {
+        description: "You can login now",
+        action: {
+          label: "Undo",
+          onClick: () => console.log("Undo"),
+        },
+      });
+      navigate("/login");
+    },
+    onError: (error) => {
+        toast("Registration error", {
+          description: error.message,
+          action: {
+            label: "Undo",
+            onClick: () => console.log("Undo"),
+          },
+          className: "bg-destructive"
+        });
+  });
+
   async function onSubmit(formData: z.infer<typeof registerSchema>) {
-    const { email, password, confirmPassword } = formData;
-    console.log(email, password, confirmPassword);
+    const { username, password } = formData;
+    mutation.mutate({ username, password });
   }
 
   return (
@@ -55,12 +84,12 @@ export default function Register() {
           >
             <FormField
               control={form.control}
-              name="email"
+              name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter your email" {...field} />
+                    <Input placeholder="Enter your username" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

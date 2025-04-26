@@ -8,8 +8,10 @@ export default function BookList({
 }) {
   return (
     <>
-      {!books ? (
-        <div className="message-centered">Placeholder</div>
+      {!books || books.length === 0 ? (
+        <div className="message-centered text-xl text-primary">
+          Start exploring books!
+        </div>
       ) : (
         <div className="list">
           {books.map((book: BookListType) => (

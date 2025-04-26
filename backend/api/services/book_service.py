@@ -2,8 +2,8 @@ import html
 import re
 import httpx
 from config import settings
-from models import APIBookDetailsItem, APIBookItem, APIBookListResponse, BookDetailsResponse, BookResponse
-
+from models import APIBookDetailsItem, APIBookItem, APIBookListResponse, Book, BookCreate, BookDetailsResponse, BookResponse
+from sqlalchemy.orm import Session
 async def fetch_books_from_api(
     query: str,
     limit: int,
@@ -81,11 +81,19 @@ def format_book(book: APIBookItem) -> BookResponse:
 
 
 
-
-
-
 def convert_into_text(html_text: str) -> str:
     plain_text = re.sub(r'<[^>]+>', '', html_text)
     decoded_text = html.unescape(plain_text)
     sentences = re.split(r'(?<=[.!?])\s+', decoded_text)
     return ' '.join(sentences[:3])
+
+
+def get_book_by_id(db: Session, id: str):
+    return db.query(Book).filter(Book.id == id).first()
+
+def create_book(db: Session, book: BookCreate):
+    db_book = Book(id=book.id, title=book.title, author=book.author, publish_date=book.publish_date, image=book.image, average_rating=book.average_rating)
+    db.add(db_book)
+    db.commit()
+    db.refresh(db_book)
+    return db_book

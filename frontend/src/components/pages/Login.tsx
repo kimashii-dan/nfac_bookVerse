@@ -22,21 +22,51 @@ import { Input } from "../ui/input";
 import { loginSchema } from "../../lib/auth-schema";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { login } from "../../helpers/api";
+import { TokenResponse } from "../../types";
+import { useAuth } from "../../hooks/useAuth";
+import { toast } from "sonner";
 
 export default function Login() {
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   });
 
+  const { setAuth, removeAuth } = useAuth();
+
   const { isSubmitting } = form.formState;
+  const mutation = useMutation({
+    mutationFn: login,
+    onSuccess: (data: TokenResponse) => {
+      toast("Login is successfull", {
+        description: "You are logged in now",
+        action: {
+          label: "Undo",
+          onClick: () => console.log("Undo"),
+        },
+      });
+      setAuth(data);
+    },
+    onError: (error) => {
+      toast("Login is successfull", {
+        description: error.message,
+        action: {
+          label: "Undo",
+          onClick: () => console.log("Undo"),
+        },
+        className: "bg-descructive",
+      });
+      removeAuth();
+    },
+  });
 
   async function onSubmit(formData: z.infer<typeof loginSchema>) {
-    const { email, password } = formData;
-    console.log(email, password);
+    mutation.mutate(formData);
   }
 
   return (
@@ -56,12 +86,12 @@ export default function Login() {
           >
             <FormField
               control={form.control}
-              name="email"
+              name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter your email" {...field} />
+                    <Input placeholder="Enter your username" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

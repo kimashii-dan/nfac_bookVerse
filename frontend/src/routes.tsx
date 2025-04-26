@@ -29,6 +29,10 @@ export const router = createBrowserRouter([
         path: "/:id",
         element: <BookPage />,
       },
+      {
+        path: "/:favorites/:id",
+        element: <BookPage />,
+      },
     ],
   },
   {

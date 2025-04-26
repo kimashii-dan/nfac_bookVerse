@@ -51,7 +51,16 @@ type BookListType = {
   author: string;
   publishDate: string;
   image: string;
-  averageRating: number;
+  averageRating?: number;
+};
+
+type BookToStore = {
+  id: string;
+  title: string;
+  author: string;
+  publish_date: string;
+  image: string;
+  average_rating?: number;
 };
 
 type BookDetailsType = {
@@ -65,7 +74,20 @@ type BookDetailsType = {
   ratingsCount: string;
 };
 
+type Credentials = {
+  username: string;
+  password: string;
+};
+
+type TokenResponse = {
+  access_token: string;
+  username: string;
+};
+
 export type {
+  BookToStore,
+  TokenResponse,
+  Credentials,
   Theme,
   ThemeProviderProps,
   ThemeProviderState,

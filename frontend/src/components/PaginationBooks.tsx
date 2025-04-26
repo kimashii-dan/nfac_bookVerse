@@ -31,7 +31,7 @@ export default function PaginationBooks({
   const nextPage = currentPage + 1;
 
   return (
-    <Pagination className="my-10">
+    <Pagination className="mb-10">
       <PaginationContent>
         {currentPage !== 1 && (
           <PaginationItem>

@@ -137,11 +137,11 @@
 
 @layer components {
   .list {
-    @apply grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-12 items-center justify-center mt-12;
+    @apply grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-12 items-center justify-center my-12;
   }
 
   .message-centered {
-    @apply h-[70vh] flex items-center justify-center;
+    @apply h-[75vh] flex items-center justify-center;
   }
 
   .title {

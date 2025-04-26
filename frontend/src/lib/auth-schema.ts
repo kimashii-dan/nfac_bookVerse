@@ -1,11 +1,10 @@
 import { z } from "zod";
 
 export const commonSchema = z.object({
-  email: z
+  username: z
     .string()
-    .email({ message: "Please enter a valid email address" })
-    .min(2)
-    .max(50),
+    .min(5, { message: "Username must be at least 8 characters long" })
+    .max(50, { message: "Username cannot exceed 50 characters" }),
 
   password: z
     .string()
@@ -19,7 +18,7 @@ export const commonSchema = z.object({
 
 export const registerSchema = commonSchema
   .pick({
-    email: true,
+    username: true,
     password: true,
     confirmPassword: true,
   })
@@ -29,6 +28,6 @@ export const registerSchema = commonSchema
   });
 
 export const loginSchema = commonSchema.pick({
-  email: true,
+  username: true,
   password: true,
 });

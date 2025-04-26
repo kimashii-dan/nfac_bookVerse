@@ -1,8 +1,9 @@
 import { Outlet, Navigate } from "react-router-dom";
-import isLoggedIn from "../../helpers/isLoggedIn";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function AuthLayout() {
-  if (isLoggedIn()) return <Navigate to="/" />;
+  const { isAuthenticated } = useAuth();
+  if (isAuthenticated) return <Navigate to="/" />;
   return (
     <main className="h-[90vh]">
       <Outlet />
