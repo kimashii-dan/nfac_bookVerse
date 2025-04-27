@@ -1,19 +1,18 @@
 # 📚 BookVerse
-- an app that allows users to search for books, view detailed information about them, save favorites, and communicate with AI to receive reading recommendations.
+an app that allows users to search for books, view detailed information about them, save favorites, and communicate with AI to receive reading recommendations.
 
 ---
 
 ## Installation
-
-# Clone the repo
+### Clone the repo
 - git clone https://github.com/kimashii-dan/nfac_bookVerse.git
 
-# Frontend run:
+### Frontend run:
 - cd frontend
 - npm i
 - npm run dev
 
-# Backend run:
+### Backend run:
 - cd backend
 - python -m venv venv
 - venv\Scripts\activate
@@ -42,7 +41,8 @@ Because external APIs are only allowed to be called from the server side, the st
 ## Methodologies
 1. I used 'debounce' technique to make UI to be more responsive and to reduce overall load on DB. When the user types, a timer sets the value after a delay. If they keep typing, the timer resets. Since the debounced value is in the useEffect dependency array, the effect only triggers after typing stops.
 2. I implemented theming using useContext(ReactAPI) to manage light and dark modes globally. The current theme is stored in context and can be toggled from anywhere in the app. Components from Shadcn respond to the theme automatically using predefined color variables in index.css.
-3. 
+
+   
 ---
 
 ## Issues I've faced during development
@@ -50,13 +50,11 @@ Because external APIs are only allowed to be called from the server side, the st
 - Search params can only be set in URL if search "query" is not empty.
 - As soon as search "query" is not empty, automatically set "page" parameter to 1 and "searchBy" parameter to local state
 - "Page" parameter needs to be reset if search "query" or "searchBy" changes
-
 2. Because I mostly have been working with Javascript I was unintentionally declaring model's fields like this - averageRating, instead of this - average_rating. I actually didn't know that naming like camelCase or snake_case does matter. And in fact, I got "type mismatch error" when tried add book to the user. So I learned from it.
 
 ## Stack
-Frontend: React (Javascript)
-Backend: FastAPI (Python)
---
-Why I chose this stack?
+- Frontend - React (Javascript)
+- Backend - FastAPI (Python)
+### Why I chose this stack?
 - I really like React's component-based structure, which helps me break down the UI into reusable pieces and build faster.
 - I've never tried with FastAPI and that's why I wanted to give it a try.
