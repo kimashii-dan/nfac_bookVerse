@@ -18,17 +18,18 @@ origins = [
     "https://nfac-book-verse.vercel.app",
     "http://nfac-book-verse.vercel.app",
     "http://localhost:5173",
+    "https://nfacbookverse.vercel.app",
+    "http://nfacbookverse.vercel.app",
 ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
+    expose_headers=["*"]
 )
-
-
 
 
 @app.post('/register')
