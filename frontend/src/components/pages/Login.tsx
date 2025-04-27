@@ -53,13 +53,12 @@ export default function Login() {
       setAuth(data);
     },
     onError: (error) => {
-      toast("Login is successfull", {
+      toast("Login error", {
         description: error.message,
         action: {
           label: "Undo",
           onClick: () => console.log("Undo"),
         },
-        className: "bg-descructive",
       });
       removeAuth();
     },
@@ -72,7 +71,7 @@ export default function Login() {
   return (
     <Card className="w-96">
       <CardHeader>
-        <CardTitle>Sign In</CardTitle>
+        <CardTitle>Login</CardTitle>
         <CardDescription>
           Welcome back! Please sign in to continue.
         </CardDescription>

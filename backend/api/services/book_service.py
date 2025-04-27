@@ -2,7 +2,7 @@ import html
 import re
 import httpx
 from config import settings
-from models import APIBookDetailsItem, APIBookItem, APIBookListResponse, Book, BookCreate, BookDetailsResponse, BookResponse
+from models import APIBookDetailsItem, APIBookItem, APIBookListResponse, Book, BookDetailsResponse, BookResponse
 from sqlalchemy.orm import Session
 async def fetch_books_from_api(
     query: str,
@@ -55,10 +55,10 @@ def format_details_book(book: APIBookDetailsItem) -> BookDetailsResponse:
         title=volume_info.title or "Unknown Title",
         author=volume_info.authors[0] if volume_info.authors else "Unknown Author",
         description=description or "No description available",
-        publishDate=published_year,
+        publish_date=published_year,
         image=thumbnail,
-        averageRating=volume_info.averageRating,
-        ratingsCount=volume_info.ratingsCount
+        average_rating=volume_info.averageRating,
+        ratings_count=volume_info.ratingsCount
     )
 
 
@@ -74,9 +74,9 @@ def format_book(book: APIBookItem) -> BookResponse:
         id=book.id,
         title=volume_info.title or "Unknown Title",
         author=volume_info.authors[0] if volume_info.authors else "Unknown Author",
-        publishDate=published_year,
+        publish_date=published_year,
         image=thumbnail,
-        averageRating=volume_info.averageRating
+        average_rating=volume_info.averageRating
     )
 
 
@@ -91,7 +91,7 @@ def convert_into_text(html_text: str) -> str:
 def get_book_by_id(db: Session, id: str):
     return db.query(Book).filter(Book.id == id).first()
 
-def create_book(db: Session, book: BookCreate):
+def create_book(db: Session, book: BookResponse):
     db_book = Book(id=book.id, title=book.title, author=book.author, publish_date=book.publish_date, image=book.image, average_rating=book.average_rating)
     db.add(db_book)
     db.commit()

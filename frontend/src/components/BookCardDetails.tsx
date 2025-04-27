@@ -1,20 +1,22 @@
 import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "../hooks/useAuth";
-import { BookDetailsType, BookToStore } from "../types";
+import { BookDetailsType, BookType } from "../types";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Loader2, Star, UserRoundSearch } from "lucide-react";
 import { addFavorite } from "../helpers/api";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
-export default function BookCard({
+export default function BookDetailsCard({
   book,
   isFavoritePage,
 }: {
   book: BookDetailsType;
   isFavoritePage?: boolean;
 }) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, removeAuth } = useAuth();
+  const navigate = useNavigate();
 
   const mutation = useMutation({
     mutationFn: addFavorite,
@@ -34,38 +36,39 @@ export default function BookCard({
           label: "Undo",
           onClick: () => console.log("Undo"),
         },
-        className: "bg-destructive",
       });
+      removeAuth();
+      navigate("/login");
     },
   });
 
   function handleAddBook() {
-    const formattedBook: BookToStore = {
+    const formattedBook: BookType = {
       id: book.id,
       title: book.title,
       author: book.author,
-      publish_date: book.publishDate,
+      publish_date: book.publish_date,
       image: `https://books.google.com/books/content?id=${book.id}&printsec=frontcover&img=1&zoom=1&source=gbs_api`,
-      average_rating: Number(book.averageRating),
+      average_rating: Number(book.average_rating),
     };
 
     mutation.mutate(formattedBook);
   }
 
   return (
-    <Card className="my-20 p-4 md:p-10">
-      <div className="flex flex-col md:flex-row gap-10">
+    <Card className="my-20 p-4 base:p-10">
+      <div className="flex flex-col base:flex-row gap-10">
         <img
           src={book.image || "/placeholder.jpg"}
           alt={book.title}
-          className="md:w-[45%] w-full object-cover rounded-lg"
+          className="base:w-[45%] w-full object-cover rounded-lg"
         />
 
-        <div className="md:w-[50%] flex flex-col gap-6">
+        <div className="base:w-[50%] flex flex-col gap-6">
           <div>
             <h2 className="text-3xl font-semibold">{book.title}</h2>
             <p className="text-lg text-muted-foreground">
-              {book.author} • {book.publishDate}
+              {book.author} • {book.publish_date}
             </p>
           </div>
 
@@ -76,20 +79,24 @@ export default function BookCard({
 
           {isAuthenticated && !isFavoritePage && (
             <Button
-              className="w-3/5 text-sm md:text-base"
+              className="w-3/5 text-sm base:text-base"
               onClick={() => handleAddBook()}
             >
-              {mutation.isPending ? <Loader2 /> : "Add to favorites"}
+              {mutation.isPending ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                "Add to favorites"
+              )}
             </Button>
           )}
 
-          <div className="flex justify-between mt-auto text-sm md:text-base">
+          <div className="flex justify-between mt-auto text-sm base:text-base">
             <div className="group gap-2">
-              <span>Rating: {book.averageRating ?? "?"}</span>
+              <span>Rating: {book.average_rating ?? "?"}</span>
               <Star color="orange" fill="yellow" size="25" />
             </div>
             <div className="group gap-2">
-              <span>Ratings: {book.ratingsCount ?? "?"}</span>
+              <span>Ratings: {book.ratings_count ?? "?"}</span>
               <UserRoundSearch color="gray" size="25" />
             </div>
           </div>

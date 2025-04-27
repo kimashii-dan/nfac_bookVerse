@@ -2,7 +2,7 @@ from fastapi import  Depends, FastAPI, HTTPException, Query
 from fastapi.security import  OAuth2PasswordRequestForm
 import httpx
 from services.book_service import create_book, fetch_book_by_id, fetch_books_from_api, format_book, format_details_book, get_book_by_id
-from models import Book, BookCreate, BookDetailsResponse, BookSearchResult, UserCreate
+from models import  BookDetailsResponse, BookResponse, BookListResponse, UserDTO
 from typing import Optional
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
@@ -31,7 +31,7 @@ app.add_middleware(
 
 
 @app.post('/register')
-def register_user(user: UserCreate, db: Session = Depends(get_db)):
+def register_user(user: UserDTO, db: Session = Depends(get_db)):
     db_user = get_user_by_username(db, username=user.username)
     if db_user:
         raise HTTPException(status_code=400, detail="Username already registered")
@@ -53,16 +53,12 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
     return {"access_token": access_token, "username": user.username}
     
 
-@app.get("/verify-token/{token}")
-async def verify_user_token(token: str):
-    verify_token(token=token)
-    return {"message": "Token is valid"}
 
 
 
 
 @app.post("/favorites")
-async def add_favorite(book: BookCreate, token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+async def add_favorite(book: BookResponse, token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     username = verify_token(token)
     if not username:
         raise HTTPException(
@@ -107,15 +103,17 @@ def get_user_favorites(token: str = Depends(oauth2_scheme), db: Session = Depend
     
     return db_user.books   
 
-@app.get("/books", response_model=BookSearchResult)
+
+
+@app.get("/books", response_model=BookListResponse)
 async def find_books(
     query: Optional[str] = Query(None),
     search_by: str = Query("title", regex="^(title|author)$"),
     page: int = Query(1, ge=1)
-) -> BookSearchResult:
+) -> BookListResponse:
     
     if not query:
-        return BookSearchResult(books=None, totalBooks=0)
+        return BookListResponse(books=None, totalBooks=0)
 
     limit = 6
     offset = (page - 1) * limit
@@ -123,10 +121,10 @@ async def find_books(
     try:
         data = await fetch_books_from_api(query=query, limit=limit, offset=offset, search_by=search_by)
         if not data.items:
-                return BookSearchResult(books=None, totalBooks=0)
+                return BookListResponse(books=None, totalBooks=0)
 
         books = [format_book(book) for book in data.items]
-        return BookSearchResult(books=books, totalBooks=data.totalItems)
+        return BookListResponse(books=books, total_books=data.totalItems)
 
     except httpx.HTTPStatusError as e:
         raise HTTPException(

@@ -2,7 +2,7 @@ from fastapi import  Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 from db import SessionLocal
-from models import User, UserCreate
+from models import User, UserDTO
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta, timezone
@@ -26,7 +26,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 def get_user_by_username(db: Session, username: str):
     return db.query(User).filter(User.username == username).first()
 
-def create_user(db: Session, user: UserCreate):
+def create_user(db: Session, user: UserDTO):
     hashed_password = pwd_context.hash(user.password)
     db_user = User(username=user.username, hashed_password=hashed_password)
     db.add(db_user)

@@ -1,22 +1,22 @@
 import {
   BookDetailsType,
-  BookListType,
-  BookToStore,
+  BookType,
   Credentials,
   SearchParams,
+  SearchResponse,
   TokenResponse,
 } from "../types";
 
 const API_BASE = import.meta.env.VITE_API_BASE;
 
-export const fetchBooks = async (
+export async function fetchBooks(
   params: Required<SearchParams>
-): Promise<{ books: BookListType[] | null; totalBooks: number }> => {
+): Promise<SearchResponse> {
   const { query, searchBy, page } = params;
   if (!query || !searchBy || !page) {
     return {
       books: null,
-      totalBooks: 0,
+      total_books: 0,
     };
   }
   const response = await fetch(
@@ -30,11 +30,11 @@ export const fetchBooks = async (
   }
 
   return response.json();
-};
+}
 
-export const fetchBook = async (
+export async function fetchBook(
   id: string | undefined
-): Promise<BookDetailsType | null> => {
+): Promise<BookDetailsType | null> {
   if (!id) {
     return null;
   }
@@ -45,7 +45,7 @@ export const fetchBook = async (
   }
 
   return response.json();
-};
+}
 
 export async function login(credentials: Credentials): Promise<TokenResponse> {
   const formattedCredentials = new URLSearchParams();
@@ -82,7 +82,7 @@ export async function register(credentials: Credentials) {
   return await response.json();
 }
 
-export async function addFavorite(book: BookToStore) {
+export async function addFavorite(book: BookType) {
   const token = localStorage.getItem("token");
   const response = await fetch(`${API_BASE}/favorites`, {
     method: "POST",
@@ -100,7 +100,7 @@ export async function addFavorite(book: BookToStore) {
   return await response.json();
 }
 
-export async function getFavorites(): Promise<BookListType[]> {
+export async function getFavorites(): Promise<BookType[]> {
   const token = localStorage.getItem("token");
   const response = await fetch(`${API_BASE}/favorites`, {
     method: "GET",

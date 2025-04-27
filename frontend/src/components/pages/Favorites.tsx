@@ -3,6 +3,7 @@ import { getFavorites } from "../../helpers/api";
 import BookList from "../BookList";
 import { useEffect } from "react";
 import { useAuth } from "../../hooks/useAuth";
+import SkeletonBookList from "../loadingUI/SkeletonBookList";
 
 export default function Favorites() {
   const {
@@ -17,8 +18,6 @@ export default function Favorites() {
 
   const { removeAuth } = useAuth();
 
-  console.log(books);
-
   useEffect(() => {
     if (isError) {
       removeAuth();
@@ -28,7 +27,7 @@ export default function Favorites() {
   return (
     <div className="container my-12">
       {isLoading ? (
-        <div className="message-centered">Loading books...</div>
+        <SkeletonBookList />
       ) : isError ? (
         <div className="message-centered">
           Error: {(error as Error).message}

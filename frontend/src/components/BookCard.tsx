@@ -1,5 +1,5 @@
-import { Link, useLocation } from "react-router-dom";
-import { BookListType } from "../types";
+import { Link } from "react-router-dom";
+import { BookType } from "../types";
 import { Button } from "./ui/button";
 import {
   Card,
@@ -11,13 +11,15 @@ import {
 } from "./ui/card";
 import { Star } from "lucide-react";
 
-export default function BookCard({ book }: { book: BookListType }) {
-  const location = useLocation();
-
+export default function BookCard({
+  book,
+  path,
+}: {
+  book: BookType;
+  path: string;
+}) {
   const urlToBook =
-    location.pathname === "/favorites"
-      ? `/favorites/${book.id}`
-      : `/${book.id}`;
+    path === "/favorites" ? `/favorites/${book.id}` : `/${book.id}`;
 
   return (
     <Card className="max-w-[350px] mx-auto w-full">
@@ -27,7 +29,7 @@ export default function BookCard({ book }: { book: BookListType }) {
         </CardTitle>
         <CardDescription>
           <h2>
-            {book.author} • {book.publishDate}
+            {book.author} • {book.publish_date}
           </h2>
         </CardDescription>
       </CardHeader>
@@ -43,7 +45,7 @@ export default function BookCard({ book }: { book: BookListType }) {
             <Link to={urlToBook}>View details</Link>
           </Button>
           <div className="group gap-2">
-            {book.averageRating ? book.averageRating : "?"}
+            {book.average_rating ? book.average_rating : "?"}
             <Star color="orange" fill="yellow" />
           </div>
         </CardAction>

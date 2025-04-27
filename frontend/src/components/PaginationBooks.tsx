@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import {
   Pagination,
   PaginationContent,
@@ -7,23 +6,22 @@ import {
 } from "./ui/pagination";
 
 import { RefObject } from "react";
+import { useSearch } from "../hooks/useSearch";
 
 export default function PaginationBooks({
   currentPage,
-  baseUrl,
-  totalBooks,
+  total_books,
   topRef,
 }: {
   currentPage: number;
-  totalBooks: number | undefined;
-  baseUrl: string;
+  total_books: number | undefined;
   topRef: RefObject<HTMLDivElement | null>;
 }) {
-  const navigate = useNavigate();
-  const totalPages = (totalBooks ?? 0) / 6;
+  const totalPages = (total_books ?? 0) / 6;
+  const { setFilters } = useSearch();
 
   const handlePageChange = (newPage: number) => {
-    navigate(`${baseUrl}&page=${newPage}`);
+    setFilters({ page: newPage });
     topRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 

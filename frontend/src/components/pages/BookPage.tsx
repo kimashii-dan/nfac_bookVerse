@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { fetchBook } from "../../helpers/api";
 import BookCardDetails from "../BookCardDetails";
+import SkeletonBookPage from "../loadingUI/SkeletonBookPage";
 
 export default function BookPage() {
   const { favorites, id } = useParams();
@@ -18,7 +19,7 @@ export default function BookPage() {
   return (
     <div className="smaller-container">
       {isLoading ? (
-        <div className="message-centered">Loading book...</div>
+        <SkeletonBookPage />
       ) : isError ? (
         <div className="message-centered">
           Error: {(error as Error).message}

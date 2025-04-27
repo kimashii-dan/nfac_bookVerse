@@ -13,27 +13,34 @@ export function useSearch() {
     : 1;
 
   const setFilters = useCallback(
-    (filters: SearchParams) => {
-      setSearchParams((params) => {
-        if (filters.query !== undefined && filters.query !== "") {
-          params.set("query", filters.query);
+    (filters: Partial<SearchParams>) => {
+      const params = new URLSearchParams(searchParams.toString());
 
-          if (filters.searchBy) {
-            params.set("searchBy", filters.searchBy);
-          }
-          if (filters.page) {
-            params.set("page", filters.page.toString());
-          }
-        } else {
-          params.delete("query");
-          params.delete("searchBy");
-          params.delete("page");
-        }
+      if (filters.query === "") {
+        setSearchParams(new URLSearchParams());
+        return;
+      }
 
-        return params;
-      });
+      if (filters.query !== undefined) {
+        params.set("query", filters.query);
+        params.set("searchBy", filters.searchBy || searchBy);
+        params.set("page", "1");
+      } else if (filters.searchBy !== undefined && query) {
+        params.set("searchBy", filters.searchBy);
+        params.set("page", "1");
+      }
+
+      if (
+        filters.page !== undefined &&
+        filters.query === undefined &&
+        filters.searchBy === undefined
+      ) {
+        params.set("page", String(filters.page));
+      }
+
+      setSearchParams(params);
     },
-    [setSearchParams]
+    [searchParams, searchBy, query, setSearchParams]
   );
 
   return {

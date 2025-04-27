@@ -17,61 +17,23 @@ type SearchParams = {
   page?: number;
 };
 
-type APIBookListType = {
-  id: string;
-  volumeInfo: {
-    title: string;
-    authors?: string[];
-    publishedDate?: string;
-    imageLinks?: {
-      thumbnail?: string;
-    };
-    averageRating: string;
-  };
-};
-
-// type APIBookDetailsType = {
-//   id: string;
-//   volumeInfo: {
-//     title: string;
-//     description?: string;
-//     authors?: string[];
-//     publishedDate?: string;
-//     imageLinks?: {
-//       thumbnail?: string;
-//     };
-//     averageRating?: number;
-//     ratingsCount?: number;
-//   };
-// };
-
-type BookListType = {
-  id: string;
-  title: string;
-  author: string;
-  publishDate: string;
-  image: string;
-  averageRating?: number;
-};
-
-type BookToStore = {
+type BookType = {
   id: string;
   title: string;
   author: string;
   publish_date: string;
   image: string;
-  average_rating?: number;
+  average_rating: number;
 };
 
-type BookDetailsType = {
-  id: string;
-  title: string;
-  author: string;
+type SearchResponse = {
+  books: BookType[] | null;
+  total_books: number;
+};
+
+type BookDetailsType = BookType & {
   description: string;
-  publishDate: string;
-  image: string;
-  averageRating: string;
-  ratingsCount: string;
+  ratings_count: string;
 };
 
 type Credentials = {
@@ -85,7 +47,8 @@ type TokenResponse = {
 };
 
 export type {
-  BookToStore,
+  SearchResponse,
+  BookType,
   TokenResponse,
   Credentials,
   Theme,
@@ -93,6 +56,4 @@ export type {
   ThemeProviderState,
   SearchParams,
   BookDetailsType,
-  BookListType,
-  APIBookListType,
 };

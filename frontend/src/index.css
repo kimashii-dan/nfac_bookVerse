@@ -113,6 +113,10 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+@theme {
+  --breakpoint-base: 56rem;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50 box-border font-[Inter];

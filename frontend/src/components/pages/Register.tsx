@@ -54,14 +54,14 @@ export default function Register() {
       navigate("/login");
     },
     onError: (error) => {
-        toast("Registration error", {
-          description: error.message,
-          action: {
-            label: "Undo",
-            onClick: () => console.log("Undo"),
-          },
-          className: "bg-destructive"
-        });
+      toast("Registration error", {
+        description: error.message,
+        action: {
+          label: "Undo",
+          onClick: () => console.log("Undo"),
+        },
+      });
+    },
   });
 
   async function onSubmit(formData: z.infer<typeof registerSchema>) {

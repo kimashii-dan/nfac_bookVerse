@@ -14,7 +14,7 @@ import {
 } from "./ui/select";
 
 export default function SearchFilter() {
-  const { query, searchBy, page, setFilters } = useSearch();
+  const { query, searchBy, setFilters } = useSearch();
 
   const [localSearch, setLocalSearch] = useState<SearchParams["query"]>(query);
   const [localFilter, setLocalFilter] =
@@ -22,10 +22,9 @@ export default function SearchFilter() {
   const debouncedSearch = useDebounce(localSearch);
 
   useEffect(() => {
-    if (debouncedSearch === "" && !query) return;
-
-    setFilters({ query: debouncedSearch, searchBy: localFilter, page: page });
-  }, [debouncedSearch, localFilter, page, query, setFilters]);
+    if (debouncedSearch === query && localFilter === searchBy) return;
+    setFilters({ query: debouncedSearch, searchBy: localFilter });
+  }, [debouncedSearch, localFilter, query, searchBy, setFilters]);
 
   return (
     <div className="centered-row">

@@ -4,10 +4,11 @@ from sqlalchemy import Column, Float, ForeignKey, Integer, String, Table
 from sqlalchemy.orm import relationship
 from db import Base, engine
 
+
+# API models
 class ImageLinks(BaseModel):
     smallThumbnail: Optional[str] = None
     thumbnail: Optional[str] = None
-
 
 class VolumeInfo(BaseModel):
     title: Optional[str] = None
@@ -25,7 +26,6 @@ class VolumeDetailsInfo(BaseModel):
     averageRating: Optional[float] = None
     ratingsCount: Optional[int] = None    
 
-
 class APIBookItem(BaseModel):
     id: str
     volumeInfo: VolumeInfo
@@ -37,36 +37,10 @@ class APIBookDetailsItem(BaseModel):
 class APIBookListResponse(BaseModel):
     items: Optional[List[APIBookItem]] = None
     totalItems: int = 0
-
-class BookResponse(BaseModel):
-    id: str
-    title: str
-    author: str
-    publishDate: str
-    image: str
-    averageRating: Optional[float] = None
-
-class BookDetailsResponse(BaseModel):
-    id: str
-    title: str
-    author: str
-    description: Optional[str] = None
-    publishDate: str
-    image: str
-    averageRating: Optional[float] = None
-    ratingsCount: Optional[int] = None
-
-class BookSearchResult(BaseModel):
-    books: Optional[List[BookResponse]] = None
-    totalBooks: int = 0
-
-
-
-class UserCreate(BaseModel):
-    username:str
-    password:str
     
-class BookCreate(BaseModel):
+
+# Response models
+class BookResponse(BaseModel):
     id: str
     title: str
     author: str
@@ -74,6 +48,24 @@ class BookCreate(BaseModel):
     image: str
     average_rating: Optional[float] = None
 
+class BookDetailsResponse(BaseModel):
+    id: str
+    title: str
+    author: str
+    description: Optional[str] = None
+    publish_date: str
+    image: str
+    average_rating: Optional[float] = None
+    ratings_count: Optional[int] = None
+
+class BookListResponse(BaseModel):
+    books: Optional[List[BookResponse]] = None
+    total_books: int = 0
+
+class UserDTO(BaseModel):
+    username:str
+    password:str
+    
 
 user_book_association = Table(
     'user_book',
