@@ -15,8 +15,8 @@ from services.auth_service import oauth2_scheme
 app = FastAPI()
 
 origins = [
+    "https://nfac-book-verse.vercel.app",
     "http://localhost:5173",
-    "https://nfac-book-verse.vercel.app"
 ]
 
 app.add_middleware(
@@ -108,7 +108,7 @@ def get_user_favorites(token: str = Depends(oauth2_scheme), db: Session = Depend
 @app.get("/books", response_model=BookListResponse)
 async def find_books(
     query: Optional[str] = Query(None),
-    search_by: str = Query("title", regex="^(title|author)$"),
+    search_by: str = Query("title", pattern="^(title|author)$"),
     page: int = Query(1, ge=1)
 ) -> BookListResponse:
     
