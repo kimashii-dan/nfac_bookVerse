@@ -70,7 +70,7 @@ export default function Register() {
   }
 
   return (
-    <Card className="w-96">
+    <Card className="w-80 md:w-96">
       <CardHeader>
         <CardTitle>Register</CardTitle>
         <CardDescription>Create your account to get started.</CardDescription>
@@ -143,7 +143,7 @@ export default function Register() {
       </CardContent>
 
       <CardFooter className="flex gap-2">
-        <p>Already have an account?</p>
+        <p className="text-sm md:text-base">Already have an account?</p>
         <Link to="/login" className="text-blue-300">
           Login
         </Link>

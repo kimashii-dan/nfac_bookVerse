@@ -69,7 +69,7 @@ export default function Login() {
   }
 
   return (
-    <Card className="w-96">
+    <Card className="w-80 md:w-96">
       <CardHeader>
         <CardTitle>Login</CardTitle>
         <CardDescription>
@@ -126,7 +126,7 @@ export default function Login() {
       </CardContent>
 
       <CardFooter className="flex gap-2">
-        <p>Don't have an account yet?</p>
+        <p className="text-sm md:text-base">Don't have an account yet?</p>
         <Link to="/register" className="text-blue-300">
           Register
         </Link>
