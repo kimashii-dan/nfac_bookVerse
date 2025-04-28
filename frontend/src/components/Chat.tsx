@@ -81,7 +81,7 @@ export default function Chat() {
         ))}
         {mutation.isPending && (
           <div className="p-3 rounded-md bg-gray-100 text-gray-800 self-start">
-            <p className="text-sm font-semibold text-primary">Libryan</p>
+            <p className="text-sm font-semibold text-primary">LiBryan</p>
             <p className="text-sm animate-pulse">Thinking...</p>
           </div>
         )}
