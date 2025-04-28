@@ -7,6 +7,7 @@ import Profile from "./components/pages/Profile";
 import MainLayout from "./components/pages/MainLayout";
 import AuthLayout from "./components/pages/AuthLayout";
 import BookPage from "./components/pages/BookPage";
+import Chat from "./components/Chat";
 
 export const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ export const router = createBrowserRouter([
       {
         path: "/:favorites/:id",
         element: <BookPage />,
+      },
+      {
+        path: "/chat",
+        element: <Chat />,
       },
     ],
   },

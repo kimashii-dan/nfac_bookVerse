@@ -66,6 +66,31 @@ class UserDTO(BaseModel):
     username:str
     password:str
     
+    
+class UserPrompt(BaseModel):
+    prompt: str    
+
+class VolumeTitleOnly(BaseModel):
+    title: Optional[str] = None
+
+class BookID(BaseModel):
+    id: str
+    volumeInfo: VolumeTitleOnly
+
+class BookTitleResponse(BaseModel):
+    items: Optional[List[BookID]] = None
+    
+    
+    
+class BookTitle(BaseModel):
+    title: str
+    id: str
+
+class GeminiResponse(BaseModel):
+    main_text: str
+    books: Optional[List[BookTitle]]
+    
+    
 
 user_book_association = Table(
     'user_book',

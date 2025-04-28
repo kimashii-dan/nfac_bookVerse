@@ -27,11 +27,7 @@ export default function BookList({
   }
 
   if (isEmptyResults) {
-    return (
-      <div className="message-centered text-xl font-semibold text-primary">
-        Start exploring books!
-      </div>
-    );
+    return <div className="message-centered">Start exploring books!</div>;
   }
 
   return (

@@ -2,6 +2,7 @@ import {
   BookDetailsType,
   BookType,
   Credentials,
+  GeminiResponse,
   SearchParams,
   SearchResponse,
   TokenResponse,
@@ -111,6 +112,24 @@ export async function getFavorites(): Promise<BookType[]> {
 
   if (!response.ok) {
     throw new Error("Failed to fetch books");
+  }
+
+  return await response.json();
+}
+
+export async function generateResponse(
+  prompt: string
+): Promise<GeminiResponse> {
+  const response = await fetch(`${API_BASE}/generate`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ prompt }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to generate response");
   }
 
   return await response.json();

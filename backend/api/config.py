@@ -4,6 +4,7 @@ from pydantic import SecretStr
 class Settings(BaseSettings):
     GOOGLE_API_KEY: SecretStr
     GOOGLE_API_URL: str
+    GEMINI_API_KEY: str
     
     class Config:
         env_file = ".env"

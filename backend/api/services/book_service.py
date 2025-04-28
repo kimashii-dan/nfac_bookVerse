@@ -2,7 +2,7 @@ import html
 import re
 import httpx
 from config import settings
-from models import APIBookDetailsItem, APIBookItem, APIBookListResponse, Book, BookDetailsResponse, BookResponse
+from models import APIBookDetailsItem, APIBookItem, APIBookListResponse, Book, BookDetailsResponse, BookResponse, BookTitleResponse
 from sqlalchemy.orm import Session
 async def fetch_books_from_api(
     query: str,
@@ -22,6 +22,7 @@ async def fetch_books_from_api(
         response = await client.get(settings.GOOGLE_API_URL, params=params, timeout=10.0)
         response.raise_for_status()
         return APIBookListResponse(**response.json())
+    
     
 
 async def fetch_book_by_id(
@@ -97,3 +98,23 @@ def create_book(db: Session, book: BookResponse):
     db.commit()
     db.refresh(db_book)
     return db_book
+
+
+
+
+
+async def fetch_bookId_by_title(
+    title: str,
+) -> BookTitleResponse:
+    params = {
+            "q": f"intitle:{title}",
+            "maxResults": 1,
+            "fields": "items(id,volumeInfo/title)",
+            "key": settings.GOOGLE_API_KEY.get_secret_value()
+        }
+    
+    async with httpx.AsyncClient() as client:
+        response = await client.get(settings.GOOGLE_API_URL, params=params, timeout=10.0)
+        response.raise_for_status()
+        return BookTitleResponse(**response.json())
+    

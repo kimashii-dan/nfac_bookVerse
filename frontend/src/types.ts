@@ -46,7 +46,24 @@ type TokenResponse = {
   username: string;
 };
 
+type BookTitle = {
+  title: string;
+  id: string;
+};
+
+type GeminiResponse = {
+  main_text: string;
+  books: BookTitle[];
+};
+
+type ChatMessage = {
+  role: "user" | "libryan";
+  content: string | GeminiResponse;
+};
+
 export type {
+  GeminiResponse,
+  ChatMessage,
   SearchResponse,
   BookType,
   TokenResponse,

@@ -1,15 +1,16 @@
+import json
 from fastapi import  Depends, FastAPI, HTTPException, Query
 from fastapi.security import  OAuth2PasswordRequestForm
 import httpx
-from services.book_service import create_book, fetch_book_by_id, fetch_books_from_api, format_book, format_details_book, get_book_by_id
-from models import  BookDetailsResponse, BookResponse, BookListResponse, UserDTO
-from typing import Optional
+from services.book_service import create_book, fetch_book_by_id, fetch_bookId_by_title, fetch_books_from_api, format_book, format_details_book, get_book_by_id
+from models import  BookDetailsResponse, BookResponse, BookListResponse, BookTitle, GeminiResponse, UserDTO, UserPrompt
+from typing import List, Optional
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from datetime import  timedelta
 from services.auth_service import get_user_by_username, authenticate_user, create_access_token, create_user, verify_token, ACCESS_TOKEN_EXPIRE_MINUTES, get_db
 from services.auth_service import oauth2_scheme
-
+from services.gemini_service import generate
 
 
 app = FastAPI()
@@ -164,3 +165,34 @@ async def find_books(
             detail=f"{e}"
         )
 
+
+@app.post("/generate", response_model=GeminiResponse)
+async def generate_response(request: UserPrompt):
+    try:
+        response = generate(request.prompt)
+        result = json.loads(response)
+        
+        if not all(key in result for key in ["main_text", "book_titles"]):
+            raise ValueError("Invalid response format")
+        
+        books: List[BookTitle] = []
+    
+        for title in result["book_titles"]:
+            response = await fetch_bookId_by_title(title)
+            
+            if response.items:
+                for item in response.items:
+                    if item.volumeInfo and item.volumeInfo.title:
+                        book = BookTitle(
+                            id=item.id,
+                            title=item.volumeInfo.title
+                        )
+                        books.append(book)
+        
+        return GeminiResponse(main_text=result["main_text"], books=books)
+        
+    except json.JSONDecodeError:
+        raise HTTPException(500, "Failed to parse Gemini response")
+    except Exception as e:
+        raise HTTPException(500, f"Processing error: {str(e)}")
+        
