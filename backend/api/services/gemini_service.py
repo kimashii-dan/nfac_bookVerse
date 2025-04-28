@@ -6,7 +6,7 @@ from config import settings
 
 def generate(prompt: str):
     client = genai.Client(
-        api_key=settings.GEMINI_API_KEY
+        api_key=settings.GEMINI_API_KEY.get_secret_value()
     )
 
     model = "gemini-2.5-flash-preview-04-17"
