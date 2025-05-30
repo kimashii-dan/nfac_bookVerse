@@ -78,7 +78,7 @@ export default function Chat() {
                         {message.content.books.map((book) => (
                           <li key={book.id}>
                             <Link
-                              to={`/books/${book.id}`}
+                              to={`/books/${encodeURIComponent(book.id)}`}
                               className="text-blue-600 underline md:text-sm text-xs"
                             >
                               {book.title}

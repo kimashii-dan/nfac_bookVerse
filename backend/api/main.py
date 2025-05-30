@@ -9,7 +9,9 @@ app = FastAPI()
 
 origins = [
     "https://nfac-book-verse.vercel.app",
+    "http://nfac-book-verse.vercel.app",
     "http://localhost:5173",
+    "https://localhost:5173",
 ]
 
 app.add_middleware(

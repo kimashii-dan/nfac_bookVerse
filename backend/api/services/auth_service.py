@@ -8,7 +8,6 @@ from sqlalchemy.orm import Session
 from datetime import datetime, timedelta, timezone
 from config import settings
 
-
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 
 def get_db():
@@ -24,6 +23,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 def get_user_by_username(db: Session, username: str):
     return db.query(User).filter(User.username == username).first()
 
+
 def create_user(db: Session, user: UserDTO):
     hashed_password = pwd_context.hash(user.password)
     db_user = User(username=user.username, hashed_password=hashed_password)
@@ -31,7 +31,6 @@ def create_user(db: Session, user: UserDTO):
     db.commit()
     db.refresh(db_user)
     return {"message": "User created successfully"}
-
 
 
 def authenticate_user(username: str, password: str, db: Session):

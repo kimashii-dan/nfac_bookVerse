@@ -10,6 +10,7 @@ export default function BookPage() {
 
   const route = routePrefix[1];
   const id = routePrefix[2];
+  console.log(id);
   const {
     data: book,
     isLoading,
@@ -18,10 +19,11 @@ export default function BookPage() {
   } = useQuery({
     queryKey: ["book", id],
     queryFn: () => fetchBook(id),
+    retry: false,
   });
 
   return (
-    <div className="smaller-container">
+    <div className="base:max-w-9/12 max-w-11/12 w-full">
       {isLoading ? (
         <SkeletonBookPage />
       ) : isError ? (

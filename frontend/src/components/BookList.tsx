@@ -1,7 +1,6 @@
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { BookType } from "../types";
 import BookCard from "./BookCard";
-import { BookCopy } from "lucide-react";
 
 export default function BookList({
   books,
@@ -29,15 +28,27 @@ export default function BookList({
 
   if (isEmptyResults) {
     return (
-      <div className="message-centered text-xl flex flex-col">
-        <BookCopy size={150} className="mb-2 text-primary" />
-
+      <div className="message-centered text-xl flex flex-row gap-7 align-center justify-center">
         {location.pathname === "/favorites" ? (
-          <Link to="/" className="underline">
-            Explore books
-          </Link>
+          <div className="flex flex-col justify-center">
+            <p>
+              You don't have favorite books <u>yet</u>
+            </p>
+          </div>
         ) : (
-          <p className="font-semibold">Start exploring books!</p>
+          <>
+            <img
+              src="/book-verse.svg"
+              className="base:w-[130px] w-[80px] animate-fade-in-top"
+              alt=""
+            />
+            <div className="flex flex-col align-center base:gap-2 gap-1 animate-fade-in-bottom">
+              <h1 className="font-semibold text-2xl base:text-5xl">
+                Book Verse
+              </h1>
+              <p>Start exploring books!</p>
+            </div>
+          </>
         )}
       </div>
     );

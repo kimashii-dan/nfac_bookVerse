@@ -115,6 +115,28 @@
 
 @theme {
   --breakpoint-base: 60rem;
+
+  @keyframes fadeInFromBottom {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInFromTop {
+    from {
+      opacity: 0;
+      transform: translateY(-40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
 
 @layer base {
@@ -162,15 +184,19 @@
     @apply max-w-10/12 w-full;
   }
 
-  .smaller-container {
-    @apply max-w-9/12 w-full;
-  }
-
   .centered-row {
     @apply flex justify-between items-center flex-row w-full;
   }
 
   .centered-column {
     @apply flex justify-between items-center flex-col w-full;
+  }
+
+  .animate-fade-in-bottom {
+    animation: fadeInFromBottom 0.5s ease-in-out;
+  }
+
+  .animate-fade-in-top {
+    animation: fadeInFromTop 0.5s ease-in-out;
   }
 }

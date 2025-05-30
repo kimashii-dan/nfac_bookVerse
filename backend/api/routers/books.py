@@ -1,15 +1,15 @@
-from fastapi import  APIRouter, Depends, HTTPException, Query, logger
+from fastapi import  APIRouter, Depends, HTTPException, Query
 import httpx
-from services.book_service import create_book, fetch_book_by_id, fetch_books_from_api, format_book, format_details_book, get_book_by_id
-from models import  BookDetailsResponse, BookResponse, BookListResponse
+from services.book_service import create_book, fetch_book_by_id, fetch_books, get_book_by_id
+from models import  BookDetailsResponse, BookListResponse, BookItem
 from typing import List, Optional
 from sqlalchemy.orm import Session
 from services.auth_service import get_user_by_username, verify_token,  get_db
 from services.auth_service import oauth2_scheme
 from fastapi import APIRouter
+from helpers import format_book, format_details_book, convert_into_text
 
 books_router = APIRouter(prefix='/books', tags=["books"])
-
 
 
 @books_router.get("/", response_model=BookListResponse)
@@ -26,7 +26,7 @@ async def find_books(
     offset = (page - 1) * limit
 
     try:
-        data = await fetch_books_from_api(query=query, limit=limit, offset=offset, search_by=search_by)
+        data = await fetch_books(query=query, limit=limit, offset=offset, search_by=search_by)
         if not data.items:
                 return BookListResponse(books=None, totalBooks=0)
 
@@ -45,7 +45,7 @@ async def find_books(
         )
 
 
-@books_router.get("/favorites", response_model=List[BookResponse])
+@books_router.get("/favorites", response_model=List[BookItem])
 async def get_favorites(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     username = verify_token(token)
     
@@ -64,7 +64,7 @@ async def get_favorites(token: str = Depends(oauth2_scheme), db: Session = Depen
 
         
 @books_router.post("/favorites")
-async def add_favorite(book: BookResponse, token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+async def add_favorite(book: BookItem, token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     username = verify_token(token)
     if not username:
         raise HTTPException(
@@ -92,30 +92,19 @@ async def add_favorite(book: BookResponse, token: str = Depends(oauth2_scheme), 
     
     return {"message": f"Book {db_book.title} added to user {db_user.username}"}
 
-@books_router.get("/{id}", response_model=BookDetailsResponse or None)
-async def find_books(id: str):
-    
-    if not id:
-        return None
+
+
+@books_router.get("/{id}", response_model=BookDetailsResponse)
+async def find_book(id: str):
 
     try:
-        data = await fetch_book_by_id(id)
-        if not data.id:
-                return None
+        book = await fetch_book_by_id(id)
+    except httpx.HTTPStatusError:
+        raise HTTPException(status_code=404, detail="Book not found")
+    if not book.id or not book.volumeInfo.title:
+        raise HTTPException(status_code=404, detail="Book not found")
 
-        book_details = format_details_book(data)
-        return book_details
-
-    except httpx.HTTPStatusError as e:
-        raise HTTPException(
-            status_code=400,
-            detail=f"{e.response.status_code} - {e.response.text}"
-        )
-    except Exception as e:
-        raise HTTPException(
-            status_code=400,
-            detail=f"{e}"
-        )
+    return format_details_book(book)
         
         
 

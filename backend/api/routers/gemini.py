@@ -22,6 +22,8 @@ async def generate_response(request: UserPrompt):
     
         for title in result["book_titles"]:
             response = await fetch_bookId_by_title(title)
+            if not response.items:
+                continue
             
             if response.items:
                 for item in response.items:

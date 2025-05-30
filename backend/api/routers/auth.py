@@ -7,13 +7,13 @@ from services.auth_service import get_user_by_username, authenticate_user, creat
 
 auth_router = APIRouter(prefix='/auth', tags=["auth"])
 
+
 @auth_router.post('/register')
 def register_user(user: UserDTO, db: Session = Depends(get_db)):
     db_user = get_user_by_username(db, username=user.username)
     if db_user:
         raise HTTPException(status_code=400, detail="Username already registered")
     return create_user(db=db, user=user)
-
 
 
 @auth_router.post('/token')

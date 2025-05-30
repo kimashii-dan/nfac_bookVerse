@@ -85,7 +85,7 @@ export default function BookDetailsCard({
 
           {isAuthenticated && !isFavoritePage && (
             <Button
-              className="w-3/5 text-sm base:text-base"
+              className="w-2/5 text-sm base:text-base"
               onClick={() => handleAddBook()}
               disabled={mutation.isPending || optimisticClicked}
             >

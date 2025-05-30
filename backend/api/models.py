@@ -4,8 +4,7 @@ from sqlalchemy import Column, Float, ForeignKey, Integer, String, Table
 from sqlalchemy.orm import relationship
 from db import Base, engine
 
-
-# API models
+# Search books API models
 class ImageLinks(BaseModel):
     smallThumbnail: Optional[str] = None
     thumbnail: Optional[str] = None
@@ -16,7 +15,29 @@ class VolumeInfo(BaseModel):
     publishedDate: Optional[str] = None
     imageLinks: Optional[ImageLinks] = None
     averageRating: Optional[float] = None
+    
+class APIBookItem(BaseModel):
+    id: str
+    volumeInfo: VolumeInfo
+    
+class APIBookList(BaseModel):
+    items: Optional[List[APIBookItem]] = None
+    totalItems: int = 0
+        
+class BookItem(BaseModel):
+    id: str
+    title: str
+    author: str
+    publish_date: str
+    image: str
+    average_rating: Optional[float] = None
+    
+class BookListResponse(BaseModel):
+    books: Optional[List[BookItem]] = None
+    total_books: int = 0
+    
 
+# Specific book API models    
 class VolumeDetailsInfo(BaseModel):
     title: Optional[str] = None
     authors: Optional[List[str]] = None
@@ -26,27 +47,9 @@ class VolumeDetailsInfo(BaseModel):
     averageRating: Optional[float] = None
     ratingsCount: Optional[int] = None    
 
-class APIBookItem(BaseModel):
-    id: str
-    volumeInfo: VolumeInfo
-
-class APIBookDetailsResponse(BaseModel):
+class APIBookDetails(BaseModel):
     id: str
     volumeInfo: VolumeDetailsInfo
-
-class APIBookListResponse(BaseModel):
-    items: Optional[List[APIBookItem]] = None
-    totalItems: int = 0
-    
-
-# Response models
-class BookResponse(BaseModel):
-    id: str
-    title: str
-    author: str
-    publish_date: str
-    image: str
-    average_rating: Optional[float] = None
 
 class BookDetailsResponse(BaseModel):
     id: str
@@ -58,29 +61,17 @@ class BookDetailsResponse(BaseModel):
     average_rating: Optional[float] = None
     ratings_count: Optional[int] = None
 
-class BookListResponse(BaseModel):
-    books: Optional[List[BookResponse]] = None
-    total_books: int = 0
 
-class UserDTO(BaseModel):
-    username:str
-    password:str
-    
-    
-class UserPrompt(BaseModel):
-    prompt: str    
-
+# Gemini response API models
 class VolumeTitleOnly(BaseModel):
     title: Optional[str] = None
 
-class BookID(BaseModel):
+class APIBookTitle(BaseModel):
     id: str
     volumeInfo: VolumeTitleOnly
 
-class BookTitleResponse(BaseModel):
-    items: Optional[List[BookID]] = None
-    
-    
+class APIBookTitles(BaseModel):
+    items: Optional[List[APIBookTitle]] = None
     
 class BookTitle(BaseModel):
     title: str
@@ -91,7 +82,16 @@ class GeminiResponse(BaseModel):
     books: Optional[List[BookTitle]]
     
     
+# User submissions
+class UserDTO(BaseModel):
+    username:str
+    password:str
+    
+class UserPrompt(BaseModel):
+    prompt: str    
 
+
+# Database
 user_book_association = Table(
     'user_book',
     Base.metadata,

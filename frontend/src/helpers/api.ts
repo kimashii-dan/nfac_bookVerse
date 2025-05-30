@@ -36,12 +36,8 @@ export async function fetchBooks(
   return response.json();
 }
 
-export async function fetchBook(
-  id: string | undefined
-): Promise<BookDetailsType | null> {
-  if (!id) {
-    return null;
-  }
+export async function fetchBook(id: string): Promise<BookDetailsType> {
+  console.log("api", id);
   const response = await fetch(`${API_BASE}/books/${id}`);
 
   if (!response.ok) {
