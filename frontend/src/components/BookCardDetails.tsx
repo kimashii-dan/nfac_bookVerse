@@ -3,10 +3,10 @@ import { useAuth } from "../hooks/useAuth";
 import { BookDetailsType, BookType } from "../types";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
-import { Loader2, Star, UserRoundSearch } from "lucide-react";
+import { Check, Loader2, Star, UserRoundSearch } from "lucide-react";
 import { addFavorite } from "../helpers/api";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function BookDetailsCard({
   book,
@@ -16,10 +16,13 @@ export default function BookDetailsCard({
   isFavoritePage?: boolean;
 }) {
   const { isAuthenticated, removeAuth } = useAuth();
-  const navigate = useNavigate();
+  const [optimisticClicked, setOptimisticClicked] = useState(false);
 
   const mutation = useMutation({
     mutationFn: addFavorite,
+    onMutate: () => {
+      setOptimisticClicked(true);
+    },
     onSuccess: (data) => {
       console.log(data);
       toast("Successfully added to favorites", {
@@ -30,6 +33,11 @@ export default function BookDetailsCard({
       });
     },
     onError: (error) => {
+      if (error.name === "403") {
+        removeAuth();
+      }
+      setOptimisticClicked(false);
+
       toast("Submission error", {
         description: error.message,
         action: {
@@ -37,8 +45,6 @@ export default function BookDetailsCard({
           onClick: () => console.log("Undo"),
         },
       });
-      removeAuth();
-      navigate("/login");
     },
   });
 
@@ -81,9 +87,15 @@ export default function BookDetailsCard({
             <Button
               className="w-3/5 text-sm base:text-base"
               onClick={() => handleAddBook()}
+              disabled={mutation.isPending || optimisticClicked}
             >
               {mutation.isPending ? (
-                <Loader2 className="animate-spin" />
+                <Loader2 className="animate-spin" size={18} />
+              ) : optimisticClicked ? (
+                <>
+                  <Check />
+                  Added to favorites
+                </>
               ) : (
                 "Add to favorites"
               )}

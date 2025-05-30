@@ -30,7 +30,7 @@ class APIBookItem(BaseModel):
     id: str
     volumeInfo: VolumeInfo
 
-class APIBookDetailsItem(BaseModel):
+class APIBookDetailsResponse(BaseModel):
     id: str
     volumeInfo: VolumeDetailsInfo
 

@@ -3,7 +3,6 @@ import Home from "./components/pages/Home";
 import Login from "./components/pages/Login";
 import Register from "./components/pages/Register";
 import Favorites from "./components/pages/Favorites";
-import Profile from "./components/pages/Profile";
 import MainLayout from "./components/pages/MainLayout";
 import AuthLayout from "./components/pages/AuthLayout";
 import BookPage from "./components/pages/BookPage";
@@ -23,15 +22,11 @@ export const router = createBrowserRouter([
         element: <Favorites />,
       },
       {
-        path: "/profile",
-        element: <Profile />,
-      },
-      {
-        path: "/:id",
+        path: "/books/:id",
         element: <BookPage />,
       },
       {
-        path: "/:favorites/:id",
+        path: "/favorites/:id",
         element: <BookPage />,
       },
       {

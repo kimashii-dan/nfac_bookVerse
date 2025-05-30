@@ -19,7 +19,7 @@ export default function BookCard({
   path: string;
 }) {
   const urlToBook =
-    path === "/favorites" ? `/favorites/${book.id}` : `/${book.id}`;
+    path === "/favorites" ? `/favorites/${book.id}` : `/books/${book.id}`;
 
   return (
     <Card className="max-w-[350px] mx-auto w-full">

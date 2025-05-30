@@ -39,7 +39,6 @@ export default function Login() {
 
   const { setAuth, removeAuth } = useAuth();
 
-  const { isSubmitting } = form.formState;
   const mutation = useMutation({
     mutationFn: login,
     onSuccess: (data: TokenResponse) => {
@@ -114,8 +113,12 @@ export default function Login() {
               )}
             />
 
-            <Button className="w-full" type="submit" disabled={isSubmitting}>
-              {isSubmitting ? (
+            <Button
+              className="w-full"
+              type="submit"
+              disabled={mutation.isPending}
+            >
+              {mutation.isPending ? (
                 <Loader2 className="animate-spin" size={48} />
               ) : (
                 "Submit"

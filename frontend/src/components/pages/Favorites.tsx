@@ -14,15 +14,19 @@ export default function Favorites() {
   } = useQuery({
     queryKey: ["favoriteBooks"],
     queryFn: () => getFavorites(),
+    retry: false,
   });
 
   const { removeAuth } = useAuth();
+  const reversedBooks = books ? [...books].reverse() : [];
 
   useEffect(() => {
     if (isError) {
-      removeAuth();
+      if (error.name === "403") {
+        removeAuth();
+      }
     }
-  }, [isError, removeAuth]);
+  }, [error?.name, isError, removeAuth]);
 
   return (
     <div className="container my-12">
@@ -33,7 +37,7 @@ export default function Favorites() {
           Error: {(error as Error).message}
         </div>
       ) : (
-        <BookList books={books} />
+        <BookList books={reversedBooks} />
       )}
     </div>
   );

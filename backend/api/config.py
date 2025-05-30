@@ -5,6 +5,8 @@ class Settings(BaseSettings):
     GOOGLE_API_KEY: SecretStr
     GEMINI_API_KEY: SecretStr
     GOOGLE_API_URL: str
+    JWT_SECRET: SecretStr
+    JWT_ALGORITHM: str
     
     class Config:
         env_file = ".env"

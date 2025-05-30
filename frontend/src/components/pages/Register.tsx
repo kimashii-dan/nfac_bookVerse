@@ -36,8 +36,6 @@ export default function Register() {
     },
   });
 
-  const { isSubmitting } = form.formState;
-
   const navigate = useNavigate();
 
   const mutation = useMutation({
@@ -131,8 +129,12 @@ export default function Register() {
               )}
             />
 
-            <Button className="w-full" type="submit" disabled={isSubmitting}>
-              {isSubmitting ? (
+            <Button
+              className="w-full"
+              type="submit"
+              disabled={mutation.isPending}
+            >
+              {mutation.isPending ? (
                 <Loader2 className="animate-spin" size={48} />
               ) : (
                 "Submit"

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Button } from "./ui/button";
 import Chat from "./Chat";
 import { Bot } from "lucide-react";
 
@@ -9,8 +8,9 @@ export default function ChatWrapper() {
   const toggleChat = () => {
     setIsOpen(!isOpen);
   };
+
   return (
-    <div className="fixed bottom-15 right-15">
+    <div className="fixed md:bottom-12 md:right-12 bottom-5 right-5">
       {!isOpen && (
         <div
           onClick={toggleChat}
@@ -20,12 +20,15 @@ export default function ChatWrapper() {
         </div>
       )}
       {isOpen && (
-        <div>
+        <>
           <Chat />
-          <Button onClick={toggleChat} className="mt-2 w-full">
-            Close Chat
-          </Button>
-        </div>
+          <div
+            onClick={toggleChat}
+            className="absolute top-0 right-2 text-xl cursor-pointer"
+          >
+            ×
+          </div>
+        </>
       )}
     </div>
   );

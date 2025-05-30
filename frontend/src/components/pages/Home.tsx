@@ -22,9 +22,10 @@ export default function Home() {
 
   const topRef = useRef<HTMLDivElement>(null);
   return (
-    <div ref={topRef} className="container my-12">
-      <SearchFilter />
-
+    <div className="container my-12">
+      <div ref={topRef}>
+        <SearchFilter />
+      </div>
       {query && (
         <p className="text-primary my-5 text-sm text-end">
           Found {booksData?.total_books} results for "{query}"

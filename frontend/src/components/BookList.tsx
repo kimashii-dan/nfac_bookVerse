@@ -1,6 +1,7 @@
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { BookType } from "../types";
 import BookCard from "./BookCard";
+import { BookCopy } from "lucide-react";
 
 export default function BookList({
   books,
@@ -27,7 +28,19 @@ export default function BookList({
   }
 
   if (isEmptyResults) {
-    return <div className="message-centered">Start exploring books!</div>;
+    return (
+      <div className="message-centered text-xl flex flex-col">
+        <BookCopy size={150} className="mb-2 text-primary" />
+
+        {location.pathname === "/favorites" ? (
+          <Link to="/" className="underline">
+            Explore books
+          </Link>
+        ) : (
+          <p className="font-semibold">Start exploring books!</p>
+        )}
+      </div>
+    );
   }
 
   return (

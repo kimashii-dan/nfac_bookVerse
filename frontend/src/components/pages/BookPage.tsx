@@ -1,11 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { fetchBook } from "../../helpers/api";
 import BookCardDetails from "../BookCardDetails";
 import SkeletonBookPage from "../loadingUI/SkeletonBookPage";
 
 export default function BookPage() {
-  const { favorites, id } = useParams();
+  const location = useLocation();
+  const routePrefix = location.pathname.split("/");
+
+  const route = routePrefix[1];
+  const id = routePrefix[2];
   const {
     data: book,
     isLoading,
@@ -28,7 +32,7 @@ export default function BookPage() {
         <>
           {book ? (
             <BookCardDetails
-              isFavoritePage={favorites ? true : false}
+              isFavoritePage={route === "favorites" ? true : false}
               book={book}
             />
           ) : (

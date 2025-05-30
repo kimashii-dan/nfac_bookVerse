@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ScrollArea } from "./ui/scroll-area";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
@@ -43,55 +43,72 @@ export default function Chat() {
     mutation.mutate(input);
   };
 
+  const chatEnd = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    chatEnd.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
   return (
-    <Card className="flex flex-col w-80 h-96 border rounded-md shadow-sm p-0 m-0">
+    <Card className="flex flex-col w-60 h-80 md:w-80 md:h-96 py-2 m-0">
       <ScrollArea className="px-5 pt-5 h-10/12 w-full overflow-hidden">
-        {messages.map((message, index) => (
-          <Card key={index} className="bg-accent rounded-md mb-3 p-3 gap-0">
-            <p
-              className={`
-              ${
-                message.role === "user" ? "text-foreground" : "text-primary"
-              } text-sm font-semibold`}
+        <div className="flex flex-col">
+          {messages.map((message, index) => (
+            <Card
+              key={index}
+              className={`bg-accent rounded-md mb-3 p-3 gap-0 w-fit max-w-2/3 ${
+                message.role === "user" ? "self-end" : "self-start"
+              }`}
             >
-              {message.role === "user" ? "You" : "LiBryan"}
-            </p>
-            {typeof message.content === "string" ? (
-              <p className="text-sm">{message.content}</p>
-            ) : (
-              <div className="text-sm">
-                <p>{message.content.main_text}</p>
-                {message.content.books && message.content.books.length > 0 && (
-                  <ul className="flex flex-col list-disc pl-5 mt-2 gap-2">
-                    {message.content.books.map((book) => (
-                      <li key={book.id}>
-                        <Link
-                          to={`/${book.id}`}
-                          className="text-blue-600 underline text-sm"
-                        >
-                          {book.title}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            )}
-          </Card>
-        ))}
-        {mutation.isPending && (
-          <div className="p-3 rounded-md bg-gray-100 text-gray-800 self-start">
-            <p className="text-sm font-semibold text-primary">LiBryan</p>
-            <p className="text-sm animate-pulse">Thinking...</p>
-          </div>
-        )}
+              <p
+                className={`
+              ${
+                message.role === "user" ? "text-blue-300" : "text-primary"
+              } text-sm font-semibold`}
+              >
+                {message.role === "user" ? "You" : "LiBryan"}
+              </p>
+              {typeof message.content === "string" ? (
+                <p className="md:text-sm text-xs">{message.content}</p>
+              ) : (
+                <div className="md:text-sm text-xs">
+                  <p>{message.content.main_text}</p>
+                  {message.content.books &&
+                    message.content.books.length > 0 && (
+                      <ul className="flex flex-col list-disc pl-5 mt-2 gap-2">
+                        {message.content.books.map((book) => (
+                          <li key={book.id}>
+                            <Link
+                              to={`/books/${book.id}`}
+                              className="text-blue-600 underline md:text-sm text-xs"
+                            >
+                              {book.title}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                </div>
+              )}
+            </Card>
+          ))}
+          {mutation.isPending && (
+            <Card className="bg-accent rounded-md mb-3 p-3 gap-0 w-2/3">
+              <p className="md:text-sm text-xs font-semibold text-primary">
+                LiBryan
+              </p>
+              <p className="md:text-sm text-xs animate-pulse">Thinking...</p>
+            </Card>
+          )}
+          <div ref={chatEnd} />
+        </div>
       </ScrollArea>
-      <div className="flex items-center w-full gap-1 h-2/12 p-4 border-t">
+      <div className="flex items-center w-full gap-2 h-2/12 p-4 border-t">
         <Input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask LiBryan..."
+          className="md:text-sm text-xs"
           onKeyDown={(e) => {
             if (e.key === "Enter" && !mutation.isPending && input.trim()) {
               handleSendMessage();

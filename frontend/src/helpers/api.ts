@@ -21,13 +21,16 @@ export async function fetchBooks(
     };
   }
   const response = await fetch(
-    `${API_BASE}/books?query=${encodeURIComponent(
+    `${API_BASE}/books/?query=${encodeURIComponent(
       query
     )}&search_by=${searchBy}&page=${page}`
   );
 
   if (!response.ok) {
-    throw new Error("Failed to fetch books");
+    const errorData = await response.json();
+    const error = new Error(errorData.detail || "Failed to fetch books");
+    error.name = response.status.toString();
+    throw error;
   }
 
   return response.json();
@@ -42,7 +45,10 @@ export async function fetchBook(
   const response = await fetch(`${API_BASE}/books/${id}`);
 
   if (!response.ok) {
-    throw new Error("Failed to fetch books");
+    const errorData = await response.json();
+    const error = new Error(errorData.detail || "Failed to fetch book");
+    error.name = response.status.toString();
+    throw error;
   }
 
   return response.json();
@@ -52,7 +58,7 @@ export async function login(credentials: Credentials): Promise<TokenResponse> {
   const formattedCredentials = new URLSearchParams();
   formattedCredentials.append("username", credentials.username);
   formattedCredentials.append("password", credentials.password);
-  const response = await fetch(`${API_BASE}/token`, {
+  const response = await fetch(`${API_BASE}/auth/token`, {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
@@ -61,14 +67,17 @@ export async function login(credentials: Credentials): Promise<TokenResponse> {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to login");
+    const errorData = await response.json();
+    const error = new Error(errorData.detail || "Failed to login");
+    error.name = response.status.toString();
+    throw error;
   }
 
   return await response.json();
 }
 
 export async function register(credentials: Credentials) {
-  const response = await fetch(`${API_BASE}/register`, {
+  const response = await fetch(`${API_BASE}/auth/register`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -77,7 +86,10 @@ export async function register(credentials: Credentials) {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to register");
+    const errorData = await response.json();
+    const error = new Error(errorData.detail || "Failed to register");
+    error.name = response.status.toString();
+    throw error;
   }
 
   return await response.json();
@@ -85,7 +97,7 @@ export async function register(credentials: Credentials) {
 
 export async function addFavorite(book: BookType) {
   const token = localStorage.getItem("token");
-  const response = await fetch(`${API_BASE}/favorites`, {
+  const response = await fetch(`${API_BASE}/books/favorites`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -95,7 +107,10 @@ export async function addFavorite(book: BookType) {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to store book");
+    const errorData = await response.json();
+    const error = new Error(errorData.detail || "Failed to store book");
+    error.name = response.status.toString();
+    throw error;
   }
 
   return await response.json();
@@ -103,7 +118,7 @@ export async function addFavorite(book: BookType) {
 
 export async function getFavorites(): Promise<BookType[]> {
   const token = localStorage.getItem("token");
-  const response = await fetch(`${API_BASE}/favorites`, {
+  const response = await fetch(`${API_BASE}/books/favorites`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -111,7 +126,10 @@ export async function getFavorites(): Promise<BookType[]> {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to fetch books");
+    const errorData = await response.json();
+    const error = new Error(errorData.detail || "Failed to get favorites");
+    error.name = response.status.toString();
+    throw error;
   }
 
   return await response.json();
@@ -120,7 +138,7 @@ export async function getFavorites(): Promise<BookType[]> {
 export async function generateResponse(
   prompt: string
 ): Promise<GeminiResponse> {
-  const response = await fetch(`${API_BASE}/generate`, {
+  const response = await fetch(`${API_BASE}/gemini/generate`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -129,7 +147,10 @@ export async function generateResponse(
   });
 
   if (!response.ok) {
-    throw new Error("Failed to generate response");
+    const errorData = await response.json();
+    const error = new Error(errorData.detail || "Failed to generate response");
+    error.name = response.status.toString();
+    throw error;
   }
 
   return await response.json();

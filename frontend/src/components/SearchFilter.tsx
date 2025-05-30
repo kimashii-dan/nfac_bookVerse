@@ -41,14 +41,18 @@ export default function SearchFilter() {
         }
         value={localFilter}
       >
-        <SelectTrigger className="w-3/12">
+        <SelectTrigger className="w-3/12 cursor-pointer">
           <SelectValue placeholder="Search by" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
             <SelectLabel className="font-bold">Search by</SelectLabel>
-            <SelectItem value="title">Title</SelectItem>
-            <SelectItem value="author">Author</SelectItem>
+            <SelectItem className="cursor-pointer" value="title">
+              Title
+            </SelectItem>
+            <SelectItem className="cursor-pointer" value="author">
+              Author
+            </SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>

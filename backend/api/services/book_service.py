@@ -2,7 +2,7 @@ import html
 import re
 import httpx
 from config import settings
-from models import APIBookDetailsItem, APIBookItem, APIBookListResponse, Book, BookDetailsResponse, BookResponse, BookTitleResponse
+from models import APIBookDetailsResponse, APIBookItem, APIBookListResponse, Book, BookDetailsResponse, BookResponse, BookTitleResponse
 from sqlalchemy.orm import Session
 async def fetch_books_from_api(
     query: str,
@@ -27,7 +27,7 @@ async def fetch_books_from_api(
 
 async def fetch_book_by_id(
     id: str
-) -> APIBookDetailsItem:
+) -> APIBookDetailsResponse:
     
     params = {
             "fields": "id,volumeInfo/title,volumeInfo/authors,volumeInfo/publishedDate,volumeInfo/description,volumeInfo/imageLinks,volumeInfo/averageRating,volumeInfo/ratingsCount",
@@ -38,10 +38,10 @@ async def fetch_book_by_id(
         url = f"{settings.GOOGLE_API_URL}/{id}"
         response = await client.get(url, params=params, timeout=10.0)
         response.raise_for_status()
-        return APIBookDetailsItem(**response.json())
+        return APIBookDetailsResponse(**response.json())
 
 
-def format_details_book(book: APIBookDetailsItem) -> BookDetailsResponse:
+def format_details_book(book: APIBookDetailsResponse) -> BookDetailsResponse:
     volume_info = book.volumeInfo
     published_year = volume_info.publishedDate.split("-")[0] if volume_info.publishedDate else "0000"
     
