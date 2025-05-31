@@ -12,13 +12,16 @@ export default function SkeletonBookList() {
   return (
     <div className="list">
       {Array.from({ length: 6 }).map((_, index) => (
-        <Card key={index} className="max-w-[350px] mx-auto w-full">
+        <Card
+          key={index}
+          className="max-w-[500px] mx-auto w-full h-full flex flex-col"
+        >
           <CardHeader>
             <CardTitle>
-              <Skeleton className="h-7" />
+              <Skeleton className="h-12" />
             </CardTitle>
             <CardDescription>
-              <Skeleton className="h-3 rounded-sm w-2/5" />
+              <Skeleton className="h-5 rounded-sm w-2/5" />
             </CardDescription>
           </CardHeader>
 

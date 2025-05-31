@@ -14,8 +14,7 @@ export default function BookPage() {
   const {
     data: book,
     isLoading,
-    isError,
-    error,
+    isSuccess,
   } = useQuery({
     queryKey: ["book", id],
     queryFn: () => fetchBook(id),
@@ -24,23 +23,13 @@ export default function BookPage() {
 
   return (
     <div className="base:max-w-9/12 max-w-11/12 w-full">
-      {isLoading ? (
-        <SkeletonBookPage />
-      ) : isError ? (
-        <div className="message-centered">
-          Error: {(error as Error).message}
-        </div>
-      ) : (
-        <>
-          {book ? (
-            <BookCardDetails
-              isFavoritePage={route === "favorites" ? true : false}
-              book={book}
-            />
-          ) : (
-            <div className="message-centered">Book not found</div>
-          )}
-        </>
+      {isLoading && <SkeletonBookPage />}
+
+      {isSuccess && (
+        <BookCardDetails
+          isFavoritePage={route === "favorites" ? true : false}
+          book={book}
+        />
       )}
     </div>
   );

@@ -22,10 +22,10 @@ export default function BookCard({
     path === "/favorites" ? `/favorites/${book.id}` : `/books/${book.id}`;
 
   return (
-    <Card className="max-w-[350px] mx-auto w-full">
+    <Card className="max-w-[500px] mx-auto w-full h-full flex flex-col justify-between">
       <CardHeader>
         <CardTitle>
-          <h1>{book.title}</h1>
+          <h1 className="text-2xl">{book.title}</h1>
         </CardTitle>
         <CardDescription>
           <h2>
@@ -36,7 +36,7 @@ export default function BookCard({
 
       <CardContent className="centered-column gap-10">
         <img
-          src={book.image === "" ? "/placeholder.jpg" : book.image}
+          src={book.image || "/placeholder.jpg"}
           alt={book.title}
           className="w-56 h-80 object-cover rounded-sm"
         />

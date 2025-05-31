@@ -6,7 +6,7 @@ import Favorites from "./components/pages/Favorites";
 import MainLayout from "./components/pages/MainLayout";
 import AuthLayout from "./components/pages/AuthLayout";
 import BookPage from "./components/pages/BookPage";
-import Chat from "./components/Chat";
+import NotFound from "./components/pages/NotFound";
 
 export const router = createBrowserRouter([
   {
@@ -30,8 +30,8 @@ export const router = createBrowserRouter([
         element: <BookPage />,
       },
       {
-        path: "/chat",
-        element: <Chat />,
+        path: "*",
+        element: <NotFound />,
       },
     ],
   },

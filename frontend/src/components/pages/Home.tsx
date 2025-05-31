@@ -13,8 +13,7 @@ export default function Home() {
   const {
     data: booksData,
     isLoading,
-    isError,
-    error,
+    isSuccess,
   } = useQuery({
     queryKey: ["booksData", query, searchBy, page],
     queryFn: () => fetchBooks({ query, searchBy, page }),
@@ -26,23 +25,20 @@ export default function Home() {
       <div ref={topRef}>
         <SearchFilter />
       </div>
+
       {query && (
         <p className="text-primary my-5 text-sm text-end">
           Found {booksData?.total_books} results for "{query}"
         </p>
       )}
 
-      {isLoading ? (
-        <SkeletonBookList />
-      ) : isError ? (
-        <div className="message-centered">
-          Error: {(error as Error).message}
-        </div>
-      ) : (
+      {isLoading && <SkeletonBookList />}
+
+      {isSuccess && (
         <BookList searchBy={searchBy} query={query} books={booksData?.books} />
       )}
 
-      {booksData?.books !== null && (
+      {booksData?.books && (
         <PaginationBooks
           total_books={booksData?.total_books}
           currentPage={page}

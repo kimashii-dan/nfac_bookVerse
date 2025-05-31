@@ -32,10 +32,15 @@ export default function Header() {
         <li className="group gap-8">
           <ModeToggle />
           {isAuthenticated ? (
-            <div className="group gap-2">
-              <p className="hidden sm:block">{username}</p>
-              <User2 size="20" />
-            </div>
+            <>
+              <div className="group gap-2">
+                <p className="hidden sm:block">{username}</p>
+                <User2 size="20" />
+              </div>
+              <div className="cursor-pointer" onClick={() => removeAuth()}>
+                <LogOut size="20" color="red" />
+              </div>
+            </>
           ) : (
             <Link to="/login">
               <div className="group gap-2">
@@ -43,12 +48,6 @@ export default function Header() {
                 <LogIn size="20" />
               </div>
             </Link>
-          )}
-
-          {isAuthenticated && (
-            <div className="cursor-pointer" onClick={() => removeAuth()}>
-              <LogOut size="20" color="red" />
-            </div>
           )}
         </li>
       </ul>

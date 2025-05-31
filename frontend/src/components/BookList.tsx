@@ -7,7 +7,7 @@ export default function BookList({
   query,
   searchBy,
 }: {
-  books: BookType[] | null | undefined;
+  books: BookType[] | null;
   query?: string;
   searchBy?: string;
 }) {
@@ -19,16 +19,18 @@ export default function BookList({
   if (hasSearchQuery && isEmptyResults) {
     return (
       <div className="message-centered text-xl text-primary">
-        {searchBy
-          ? `No books found with "${query}" in ${searchBy}`
-          : `No books found matching "${query}"`}
+        <p>
+          {searchBy === "author"
+            ? `No authors found with the name of "${query}"`
+            : `No books found with the title of "${query}"`}
+        </p>
       </div>
     );
   }
 
   if (isEmptyResults) {
     return (
-      <div className="message-centered text-xl flex flex-row gap-7 align-center justify-center">
+      <div className="message-centered text-xl flex sm:flex-row flex-col gap-7 align-center justify-center">
         {location.pathname === "/favorites" ? (
           <div className="flex flex-col justify-center">
             <p>
@@ -39,11 +41,11 @@ export default function BookList({
           <>
             <img
               src="/book-verse.svg"
-              className="base:w-[130px] w-[80px] animate-fade-in-top"
+              className=" w-[150px] animate-fade-in-top"
               alt=""
             />
-            <div className="flex flex-col align-center base:gap-2 gap-1 animate-fade-in-bottom">
-              <h1 className="font-semibold text-2xl base:text-5xl">
+            <div className="flex flex-col align-center base:text-left text-center  base:gap-2 gap-1 animate-fade-in-bottom">
+              <h1 className="font-semibold text-4xl base:text-5xl">
                 Book Verse
               </h1>
               <p>Start exploring books!</p>

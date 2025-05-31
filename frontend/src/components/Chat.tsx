@@ -78,7 +78,7 @@ export default function Chat() {
                         {message.content.books.map((book) => (
                           <li key={book.id}>
                             <Link
-                              to={`/books/${encodeURIComponent(book.id)}`}
+                              to={`/books/${book.id}`}
                               className="text-blue-600 underline md:text-sm text-xs"
                             >
                               {book.title}
@@ -91,6 +91,7 @@ export default function Chat() {
               )}
             </Card>
           ))}
+
           {mutation.isPending && (
             <Card className="bg-accent rounded-md mb-3 p-3 gap-0 w-2/3">
               <p className="md:text-sm text-xs font-semibold text-primary">
@@ -99,9 +100,11 @@ export default function Chat() {
               <p className="md:text-sm text-xs animate-pulse">Thinking...</p>
             </Card>
           )}
+
           <div ref={chatEnd} />
         </div>
       </ScrollArea>
+
       <div className="flex items-center w-full gap-2 h-2/12 p-4 border-t">
         <Input
           type="text"
