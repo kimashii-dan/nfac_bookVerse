@@ -26,21 +26,11 @@ class ErrorBoundary extends React.Component<
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error("ErrorBoundary caught an error", error, errorInfo);
-    console.log("hey");
-    const statusCode = error.name;
-    if (statusCode === "401" || statusCode === "403") {
-      this.props.removeAuth();
-    }
   }
 
   render() {
     if (!this.state.hasError) {
       return this.props.children;
-    }
-
-    const statusCode = this.state.error!.name;
-    if (statusCode === "401" || statusCode === "403") {
-      return null;
     }
 
     return (

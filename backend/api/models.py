@@ -89,6 +89,18 @@ class UserDTO(BaseModel):
     
 class UserPrompt(BaseModel):
     prompt: str    
+ 
+ 
+   
+class Token(BaseModel):
+    access_token: str
+    username: str
+    
+class RefreshTokenRequest(BaseModel):
+    refresh_token: str    
+    
+class TokenData(BaseModel):
+    username: Optional[str] = None
 
 
 # Database

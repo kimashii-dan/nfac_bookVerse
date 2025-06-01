@@ -7,6 +7,7 @@ import { Check, Loader2, Star, UserRoundSearch } from "lucide-react";
 import { addFavorite } from "../helpers/api";
 import { toast } from "sonner";
 import { useState } from "react";
+import { AxiosError } from "axios";
 
 export default function BookDetailsCard({
   book,
@@ -15,7 +16,7 @@ export default function BookDetailsCard({
   book: BookDetailsType;
   isFavoritePage?: boolean;
 }) {
-  const { isAuthenticated, removeAuth } = useAuth();
+  const { isAuthenticated } = useAuth();
   const [optimisticClicked, setOptimisticClicked] = useState(false);
 
   const mutation = useMutation({
@@ -32,14 +33,18 @@ export default function BookDetailsCard({
         },
       });
     },
-    onError: (error) => {
-      if (error.name === "403") {
-        removeAuth();
-      }
+    onError: (error: AxiosError) => {
       setOptimisticClicked(false);
+      let description = "An error occurred";
+      if (error.response && error.response.data) {
+        const data = error.response.data as { detail?: string };
+        if (typeof data.detail === "string") {
+          description = data.detail;
+        }
+      }
 
       toast("Submission error", {
-        description: error.message,
+        description,
         action: {
           label: "Undo",
           onClick: () => console.log("Undo"),

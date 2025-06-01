@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: SecretStr
     GOOGLE_API_URL: str
     JWT_SECRET: SecretStr
+    JWT_REFRESH: SecretStr
     JWT_ALGORITHM: str
     
     class Config:

@@ -5,6 +5,10 @@ import { useAuth } from "../hooks/useAuth";
 export default function Header() {
   const { isAuthenticated, getUsername, removeAuth } = useAuth();
 
+  async function handleLogOut() {
+    await removeAuth();
+  }
+
   const username = getUsername();
 
   return (
@@ -37,7 +41,7 @@ export default function Header() {
                 <p className="hidden sm:block">{username}</p>
                 <User2 size="20" />
               </div>
-              <div className="cursor-pointer" onClick={() => removeAuth()}>
+              <div className="cursor-pointer" onClick={handleLogOut}>
                 <LogOut size="20" color="red" />
               </div>
             </>

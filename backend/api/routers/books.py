@@ -1,13 +1,12 @@
 from fastapi import  APIRouter, Depends, HTTPException, Query
 import httpx
 from services.book_service import create_book, fetch_book_by_id, fetch_books, get_book_by_id
-from models import  BookDetailsResponse, BookListResponse, BookItem
+from models import  BookDetailsResponse, BookListResponse, BookItem, User
 from typing import List, Optional
 from sqlalchemy.orm import Session
-from services.auth_service import get_user_by_username, verify_token,  get_db
-from services.auth_service import oauth2_scheme
+from services.auth_service import get_current_user, get_db
 from fastapi import APIRouter
-from helpers import format_book, format_details_book, convert_into_text
+from helpers import format_book, format_details_book
 
 books_router = APIRouter(prefix='/books', tags=["books"])
 
@@ -46,40 +45,13 @@ async def find_books(
 
 
 @books_router.get("/favorites", response_model=List[BookItem])
-async def get_favorites(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
-    username = verify_token(token)
-    
-    if not username:
-        raise HTTPException(
-            status_code=401,
-            detail="Invalid authentication credentials",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    db_user = get_user_by_username(db, username)
-    if not db_user:
-        raise HTTPException(status_code=404, detail="User not found")
-    
+async def get_favorites(db_user: User = Depends(get_current_user)):
     return db_user.books
 
 
         
 @books_router.post("/favorites")
-async def add_favorite(book: BookItem, token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
-    username = verify_token(token)
-    if not username:
-        raise HTTPException(
-            status_code=401,
-            detail="Invalid authentication credentials",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    
-    db_user = get_user_by_username(db, username)
-    if not db_user:
-        raise HTTPException(
-            status_code=404,
-            detail="User not found"
-        )
-    
+async def add_favorite(book: BookItem, db_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     db_book = get_book_by_id(db, book.id)
     if not db_book:
         db_book = create_book(db=db, book=book)

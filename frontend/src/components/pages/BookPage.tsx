@@ -10,7 +10,6 @@ export default function BookPage() {
 
   const route = routePrefix[1];
   const id = routePrefix[2];
-  console.log(id);
   const {
     data: book,
     isLoading,

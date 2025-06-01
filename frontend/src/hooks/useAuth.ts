@@ -1,29 +1,28 @@
 import { useState, useEffect } from "react";
 import { TokenResponse } from "../types";
 import { useNavigate } from "react-router-dom";
+import { logout } from "../helpers/api";
 
 export function useAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsAuthenticated(!!token);
+    setIsAuthenticated(!!localStorage.getItem("access_token"));
   }, []);
 
   const setAuth = (data: TokenResponse) => {
     if (data.access_token !== undefined && data.username !== undefined) {
-      localStorage.setItem("token", data.access_token);
+      localStorage.setItem("access_token", data.access_token);
       localStorage.setItem("username", data.username);
-      setIsAuthenticated(true);
       navigate("/");
     }
   };
 
-  const removeAuth = () => {
-    localStorage.removeItem("token");
+  const removeAuth = async () => {
+    await logout();
+    localStorage.removeItem("access_token");
     localStorage.removeItem("username");
-    setIsAuthenticated(false);
     navigate("/login");
   };
 
