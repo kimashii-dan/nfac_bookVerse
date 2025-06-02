@@ -1,60 +1,71 @@
 # 📚 BookVerse
-an app that allows users to search for books, view detailed information about them, save favorites, and communicate with AI to receive reading recommendations.
+**BookVerse** is a fullstack web application that allows users to search for books, view detailed information, save favorites, and interact with an AI to receive personalized reading recommendations.
 
 ---
 
-## Installation
-### Clone the repo
+## 🚀 Installation
+
+### Clone the repository
 - git clone https://github.com/kimashii-dan/nfac_bookVerse.git
 
-### Frontend run:
+### Start the frontend:
 - cd frontend
 - npm i
 - npm run dev
 
-### Backend run:
+### Start the backend:
 - cd backend
 - python -m venv venv
-- venv\Scripts\activate
+- venv\Scripts\activate   # On Windows
 - cd api
-- pip install requirements.txt
+- pip install -r requirements.txt
 - uvicorn main:app --reload
 
 ---
 
-## Workflow
-Because external APIs are only allowed to be called from the server side, the structure looks like this: 
-- Frontend sends request to the backend,
-- Backend sends request to the external API,
-- External API sends response back to the backend,
-- And finally frontend receives response
-
-## Development process
-- At first I identified which frameworks/tools will I use for this task to cover as many requirements as possible. For example for theming I chose Shadcn UI library because it provides dedicated page in docs on theming implementation with Tailwind CSS.
-- It is very important for me to have a typesafety across entire application so I ensured that every type I've declared is accurate and perfectly in sync with other types. And that includes not only types in frontend but models in backend.
-- I spent a lot of time on URL parameters like "query", "searchBy", "page" to finally build the behaviour I wanted to achieve.
-- I've never deployed fullstack apps, so it is new experience for me. I used PaaS (Platform as a Service) like Vercel for the frontend and Railway for the backend.
-
+## ⚙️Workflow
+Since external APIs are only accessible from the server side, the request flow is structured as follows:
+1. The frontend sends a request to the backend.
+2. The backend calls the external API.
+3. The external API responds to the backend.
+4. The backend returns the response to the frontend.
 
 ---
 
-## Methodologies
-1. I used 'debounce' technique to make UI to be more responsive and to reduce overall load on DB. When the user types, a timer sets the value after a delay. If they keep typing, the timer resets. Since the debounced value is in the useEffect dependency array, the effect only triggers after typing stops.
-2. I implemented theming using useContext(ReactAPI) to manage light and dark modes globally. The current theme is stored in context and can be toggled from anywhere in the app. Components from Shadcn respond to the theme automatically using predefined color variables in index.css.
+## 🛠️Development process
+- I began by selecting technologies that would best meet the project requirements. For theming, I used Shadcn UI because it provides excellent support for Tailwind CSS and includes theming guidance in its documentation.
+- Ensuring type safety across the entire application was a top priority. I carefully defined types on both the frontend (React) and backend (FastAPI models) to keep everything consistent and reliable.
+- A significant amount of time was spent handling URL parameters like query, searchBy, and page to create a smooth and intuitive search experience.
+- This was my first time deploying a fullstack application. I used Vercel to host the frontend and Railway for the backend, which helped me learn about modern PaaS (Platform as a Service) deployments.
 
+---
+
+## Methodologies and features
+1. **Debounced Search Input***
+To improve responsiveness and reduce server load, I implemented debouncing. When the user types in the search input, a timer delays the update. If the user continues typing, the timer resets — ensuring requests are only sent after typing stops.
+2. **Global Theming with Context API**
+I implemented theming using useContext(ReactAPI) to manage light and dark modes globally. The current theme is stored in context and can be toggled from anywhere in the app. Components from Shadcn respond to the theme automatically using predefined color variables in index.css.
    
 ---
 
-## Issues I've faced during development
-1. I've struggled with URL search parameters because I wanted them to behaviour in a specific way:
-- Search params can only be set in URL if search "query" is not empty.
-- As soon as search "query" is not empty, automatically set "page" parameter to 1 and "searchBy" parameter to local state
-- "Page" parameter needs to be reset if search "query" or "searchBy" changes
-2. Because I mostly have been working with Javascript I was unintentionally declaring model's fields like this - averageRating, instead of this - average_rating. I actually didn't know that naming like camelCase or snake_case does matter. And in fact, I got "type mismatch error" when tried add book to the user. So I learned from it.
+## Challenges and lessons learned
+1. **Managing URL Search Parameters**.
+I wanted specific behavior from the search query:
+- query, searchBy, and page should only appear in the URL when query is not empty.
+- When a query is entered, page should reset to 1, and searchBy should sync with local state.
+- Changing either query or searchBy resets the page parameter.
+2. **Backend Naming Conventions (CamelCase vs. Snake_case)**.
+Coming from a JavaScript background, I initially used camelCase in my backend models (e.g., averageRating) instead of snake_case (average_rating). This led to a type mismatch error when saving user data — and taught me the importance of adhering to Pythonic conventions in FastAPI.
+
+---
 
 ## Stack
-- Frontend - React (Javascript)
-- Backend - FastAPI (Python)
+- **Frontend** : React (Javascript)
+- **Backend** : FastAPI (Python)
 ### Why I chose this stack?
-- I really like React's component-based structure, which helps me break down the UI into reusable pieces and build faster.
-- I've never tried with FastAPI and that's why I wanted to give it a try.
+- I enjoy React’s component-based architecture — it allows me to build UIs from reusable parts, making development faster and more structured.
+- I wanted to experiment with FastAPI, and this project gave me a great opportunity to explore it for the first time.
+
+## Deployment
+- **Frontend: Vercel**
+- **Backend: Render**
