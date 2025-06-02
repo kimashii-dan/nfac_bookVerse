@@ -1,6 +1,6 @@
 from fastapi import  APIRouter, Depends, HTTPException, Request, Response
 from fastapi.security import  OAuth2PasswordRequestForm
-from models import RefreshTokenRequest, Token, UserDTO
+from models import  Token, UserDTO
 from sqlalchemy.orm import Session
 from services.auth_service import REFRESH_TOKEN_EXPIRE_DAYS, create_refresh_token, get_user_by_username, authenticate_user, create_access_token, create_user, ACCESS_TOKEN_EXPIRE_MINUTES, get_db
 from config import settings
@@ -34,7 +34,7 @@ def login_for_access_token(response: Response, form_data: OAuth2PasswordRequestF
         value=refresh_token,
         httponly=True,
         secure=True,
-        samesite="lax",
+        samesite="none",
         max_age=REFRESH_TOKEN_EXPIRE_DAYS * 24 * 60 * 60,
     )
     return {"access_token": access_token, "refresh_token": refresh_token, "username": user.username}
@@ -86,7 +86,7 @@ async def refresh_access_token(request: Request, response: Response, db: Session
         value=new_refresh_token,
         httponly=True,
         secure=True,
-        samesite="lax",
+        samesite="none",
         max_age=REFRESH_TOKEN_EXPIRE_DAYS * 24 * 60 * 60,
     )
     return {"access_token": new_access_token, "username": username}
